@@ -44,7 +44,7 @@ const recordsNavItems = [
 ];
 
 const knowledgeNavItems = [
-  { path: '/knowledge/repository', label: 'Repository', icon: BookOpen },
+  { path: '/knowledge/materials', label: 'Materials', icon: BookOpen },
   { path: '/knowledge/discussions', label: 'Discussions', icon: MessageSquare },
 ];
 

@@ -33,7 +33,7 @@ import Certifications from "@/pages/records/Certifications";
 import Disciplinary from "@/pages/records/Disciplinary";
 
 // Knowledge
-import Repository from "@/pages/knowledge/Repository";
+import Materials from "@/pages/knowledge/Materials";
 import Discussions from "@/pages/knowledge/Discussions";
 
 // Errors
@@ -83,7 +83,7 @@ const App = () => (
               <Route path="/records/disciplinary" element={<Disciplinary />} />
 
               {/* Knowledge */}
-              <Route path="/knowledge/repository" element={<Repository />} />
+              <Route path="/knowledge/materials" element={<Materials />} />
               <Route path="/knowledge/discussions" element={<Discussions />} />
             </Route>
 

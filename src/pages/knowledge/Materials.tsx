@@ -94,7 +94,7 @@ const getTypeColor = (type: Material['type']) => {
   }
 };
 
-export default function Repository() {
+export default function Materials() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('All');
 
@@ -108,11 +108,11 @@ export default function Repository() {
   return (
     <div className="animate-fade-in">
       <PageHeader
-        title="Knowledge Repository"
+        title="Study Materials"
         subtitle="Access study materials and resources"
         breadcrumbs={[
-          { label: 'Knowledge', path: '/knowledge/repository' },
-          { label: 'Repository' },
+          { label: 'Knowledge', path: '/knowledge/materials' },
+          { label: 'Materials' },
         ]}
       />
 
