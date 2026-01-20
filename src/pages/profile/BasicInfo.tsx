@@ -6,6 +6,7 @@ import { User } from 'lucide-react';
 // Mock additional data
 const basicInfoData = {
   rollNo: '21CS101',
+  admissionNo: 'ADM2021-001',
   name: 'Rahul Sharma',
   department: 'Computer Science',
   year: 3,
@@ -16,6 +17,7 @@ const basicInfoData = {
   admissionDate: '2021-08-01',
   batch: '2021-2025',
   bloodGroup: 'O+',
+  residenceType: 'Hostel',
 };
 
 interface InfoRowProps {
@@ -67,6 +69,7 @@ export default function BasicInfo() {
         {/* Academic Details */}
         <SectionCard title="Academic Details">
           <div className="divide-y divide-border/50">
+            <InfoRow label="Admission Number" value={basicInfoData.admissionNo} />
             <InfoRow label="Roll Number" value={basicInfoData.rollNo} />
             <InfoRow label="Full Name" value={basicInfoData.name} />
             <InfoRow label="Department" value={basicInfoData.department} />
@@ -75,17 +78,10 @@ export default function BasicInfo() {
             <InfoRow label="Section" value={basicInfoData.section} />
             <InfoRow label="Batch" value={basicInfoData.batch} />
             <InfoRow label="Admission Date" value={basicInfoData.admissionDate} />
+            <InfoRow label="Nature of Residence" value={basicInfoData.residenceType} />
           </div>
         </SectionCard>
 
-        {/* Personal Details */}
-        <SectionCard title="Personal Details">
-          <div className="divide-y divide-border/50">
-            <InfoRow label="Date of Birth" value={basicInfoData.dob} />
-            <InfoRow label="Gender" value={basicInfoData.gender} />
-            <InfoRow label="Blood Group" value={basicInfoData.bloodGroup} />
-          </div>
-        </SectionCard>
       </div>
     </div>
   );

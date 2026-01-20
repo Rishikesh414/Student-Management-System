@@ -16,6 +16,10 @@ const personalData = {
   religion: 'Hindu',
   category: 'General',
   aadharNo: 'XXXX XXXX 1234',
+  dob: '2003-05-15',
+  gender: 'Male',
+  bloodGroup: 'O+',
+  motherTongue: 'Hindi',
 };
 
 export default function PersonalInfo() {
@@ -24,6 +28,11 @@ export default function PersonalInfo() {
   const [formData, setFormData] = useState({
     email: personalData.email,
     phone: personalData.phone,
+    alternatePhone: personalData.alternatePhone,
+    address: personalData.address,
+    city: personalData.city,
+    state: personalData.state,
+    pincode: personalData.pincode,
   });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -43,6 +52,11 @@ export default function PersonalInfo() {
     setFormData({
       email: personalData.email,
       phone: personalData.phone,
+      alternatePhone: personalData.alternatePhone,
+      address: personalData.address,
+      city: personalData.city,
+      state: personalData.state,
+      pincode: personalData.pincode,
     });
     setIsEditing(false);
   };
@@ -67,10 +81,10 @@ export default function PersonalInfo() {
       />
 
       <div className="grid gap-6">
-        {/* Editable Contact Info */}
+        {/* Unified Personal Details Card */}
         <SectionCard 
-          title="Contact Information"
-          subtitle="Email and phone can be updated"
+          title="Personal Details"
+          subtitle="Manage your personal, contact, and address information"
           actions={
             isEditing && (
               <div className="flex items-center gap-2">
@@ -99,76 +113,146 @@ export default function PersonalInfo() {
             )
           }
         >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium mb-2">Email Address</label>
-              {isEditing ? (
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="input-field"
-                />
-              ) : (
-                <p className="py-2.5">{formData.email}</p>
-              )}
+          <div className="space-y-6">
+            {/* Core personal details (read-only) */}
+            <div className="grid gap-4 sm:grid-cols-4">
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Date of Birth</label>
+                <p className="font-medium">{personalData.dob}</p>
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Gender</label>
+                <p className="font-medium">{personalData.gender}</p>
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Blood Group</label>
+                <p className="font-medium">{personalData.bloodGroup}</p>
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Mother Tongue</label>
+                <p className="font-medium">{personalData.motherTongue}</p>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Phone Number</label>
-              {isEditing ? (
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="input-field"
-                />
-              ) : (
-                <p className="py-2.5">{formData.phone}</p>
-              )}
-            </div>
-          </div>
-        </SectionCard>
 
-        {/* Read-only Address */}
-        <SectionCard title="Address Details" subtitle="Contact your administrator to update">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">Street Address</label>
-              <p className="font-medium">{personalData.address}</p>
+            {/* Contact information (editable) */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Email Address</label>
+                {isEditing ? (
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="input-field"
+                  />
+                ) : (
+                  <p className="py-2.5">{formData.email}</p>
+                )}
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Mobile Number</label>
+                  {isEditing ? (
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="input-field"
+                    />
+                  ) : (
+                    <p className="py-2.5">{formData.phone}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Alternate Mobile Number</label>
+                  {isEditing ? (
+                    <input
+                      type="tel"
+                      value={formData.alternatePhone}
+                      onChange={(e) => setFormData({ ...formData, alternatePhone: e.target.value })}
+                      className="input-field"
+                    />
+                  ) : (
+                    <p className="py-2.5">{formData.alternatePhone}</p>
+                  )}
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">City</label>
-              <p className="font-medium">{personalData.city}</p>
-            </div>
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">State</label>
-              <p className="font-medium">{personalData.state}</p>
-            </div>
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">Pin Code</label>
-              <p className="font-medium">{personalData.pincode}</p>
-            </div>
-          </div>
-        </SectionCard>
 
-        {/* Other Details */}
-        <SectionCard title="Other Details">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">Nationality</label>
-              <p className="font-medium">{personalData.nationality}</p>
+            {/* Address details (editable) */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium mb-2">Street Address</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="input-field"
+                  />
+                ) : (
+                  <p className="py-2.5">{formData.address}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">City</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    className="input-field"
+                  />
+                ) : (
+                  <p className="py-2.5">{formData.city}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">State</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.state}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    className="input-field"
+                  />
+                ) : (
+                  <p className="py-2.5">{formData.state}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Pin Code</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.pincode}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    className="input-field"
+                  />
+                ) : (
+                  <p className="py-2.5">{formData.pincode}</p>
+                )}
+              </div>
             </div>
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">Religion</label>
-              <p className="font-medium">{personalData.religion}</p>
-            </div>
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">Category</label>
-              <p className="font-medium">{personalData.category}</p>
-            </div>
-            <div>
-              <label className="block text-sm text-muted-foreground mb-1">Aadhar Number</label>
-              <p className="font-medium">{personalData.aadharNo}</p>
+
+            {/* Other details (read-only) */}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Nationality</label>
+                <p className="font-medium">{personalData.nationality}</p>
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Religion</label>
+                <p className="font-medium">{personalData.religion}</p>
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Category</label>
+                <p className="font-medium">{personalData.category}</p>
+              </div>
+              <div>
+                <label className="block text-sm text-muted-foreground mb-1">Aadhar Number</label>
+                <p className="font-medium">{personalData.aadharNo}</p>
+              </div>
             </div>
           </div>
         </SectionCard>
