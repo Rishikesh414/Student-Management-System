@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
-import { Save, X, Edit2, Check } from 'lucide-react';
+import { Save, X, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const personalData = {
@@ -70,14 +70,6 @@ export default function PersonalInfo() {
           { label: 'Profile', path: '/profile/basic' },
           { label: 'Personal Info' },
         ]}
-        actions={
-          !isEditing ? (
-            <button onClick={() => setIsEditing(true)} className="btn-secondary flex items-center gap-2">
-              <Edit2 className="w-4 h-4" />
-              Edit
-            </button>
-          ) : null
-        }
       />
 
       <div className="grid gap-6">
@@ -136,32 +128,32 @@ export default function PersonalInfo() {
 
             {/* Contact information (editable) */}
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Email Address</label>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="input-field"
-                  />
-                ) : (
-                  <p className="py-2.5">{formData.email}</p>
-                )}
-              </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Email Address</label>
+              {isEditing ? (
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="input-field"
+                />
+              ) : (
+                <p className="py-2.5">{formData.email}</p>
+              )}
+            </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div>
+            <div>
                   <label className="block text-sm font-medium mb-2">Mobile Number</label>
-                  {isEditing ? (
-                    <input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="input-field"
-                    />
-                  ) : (
-                    <p className="py-2.5">{formData.phone}</p>
-                  )}
+              {isEditing ? (
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="input-field"
+                />
+              ) : (
+                <p className="py-2.5">{formData.phone}</p>
+              )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Alternate Mobile Number</label>
@@ -176,11 +168,11 @@ export default function PersonalInfo() {
                     <p className="py-2.5">{formData.alternatePhone}</p>
                   )}
                 </div>
-              </div>
             </div>
+          </div>
 
             {/* Address details (editable) */}
-            <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label className="block text-sm font-medium mb-2">Street Address</label>
                 {isEditing ? (
@@ -193,8 +185,8 @@ export default function PersonalInfo() {
                 ) : (
                   <p className="py-2.5">{formData.address}</p>
                 )}
-              </div>
-              <div>
+            </div>
+            <div>
                 <label className="block text-sm font-medium mb-2">City</label>
                 {isEditing ? (
                   <input
@@ -206,8 +198,8 @@ export default function PersonalInfo() {
                 ) : (
                   <p className="py-2.5">{formData.city}</p>
                 )}
-              </div>
-              <div>
+            </div>
+            <div>
                 <label className="block text-sm font-medium mb-2">State</label>
                 {isEditing ? (
                   <input
@@ -219,8 +211,8 @@ export default function PersonalInfo() {
                 ) : (
                   <p className="py-2.5">{formData.state}</p>
                 )}
-              </div>
-              <div>
+            </div>
+            <div>
                 <label className="block text-sm font-medium mb-2">Pin Code</label>
                 {isEditing ? (
                   <input
@@ -232,26 +224,26 @@ export default function PersonalInfo() {
                 ) : (
                   <p className="py-2.5">{formData.pincode}</p>
                 )}
-              </div>
             </div>
+          </div>
 
             {/* Other details (read-only) */}
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div>
-                <label className="block text-sm text-muted-foreground mb-1">Nationality</label>
-                <p className="font-medium">{personalData.nationality}</p>
-              </div>
-              <div>
-                <label className="block text-sm text-muted-foreground mb-1">Religion</label>
-                <p className="font-medium">{personalData.religion}</p>
-              </div>
-              <div>
-                <label className="block text-sm text-muted-foreground mb-1">Category</label>
-                <p className="font-medium">{personalData.category}</p>
-              </div>
-              <div>
-                <label className="block text-sm text-muted-foreground mb-1">Aadhar Number</label>
-                <p className="font-medium">{personalData.aadharNo}</p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">Nationality</label>
+              <p className="font-medium">{personalData.nationality}</p>
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">Religion</label>
+              <p className="font-medium">{personalData.religion}</p>
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">Category</label>
+              <p className="font-medium">{personalData.category}</p>
+            </div>
+            <div>
+              <label className="block text-sm text-muted-foreground mb-1">Aadhar Number</label>
+              <p className="font-medium">{personalData.aadharNo}</p>
               </div>
             </div>
           </div>

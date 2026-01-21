@@ -1,6 +1,6 @@
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
-import { User, Phone, Briefcase } from 'lucide-react';
+import { User, Phone, Briefcase, Users } from 'lucide-react';
 
 const parentData = {
   father: {
@@ -25,6 +25,20 @@ const parentData = {
     phone: '+91 98765 33333',
     address: '456 Park Avenue, Sector 10, Mumbai',
   },
+  siblings: [
+    {
+      name: 'Arjun Sharma',
+      age: 19,
+      education: 'B.Tech Computer Science',
+      phone: '+91 98765 77777',
+    },
+    {
+      name: 'Anjali Sharma',
+      age: 16,
+      education: '12th Grade',
+      phone: '+91 98765 88888',
+    },
+  ],
 };
 
 export default function ParentInfo() {
@@ -131,7 +145,7 @@ export default function ParentInfo() {
               </div>
             </div>
 
-            {/* Guardian block below */}
+            {/* Guardian block */}
             <div className="rounded-xl border border-dashed border-border/60 bg-background/40 p-4">
               <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">
                 Local Guardian (if any)
@@ -155,6 +169,41 @@ export default function ParentInfo() {
                 </div>
               </div>
             </div>
+
+            {/* Siblings */}
+            {parentData.siblings && parentData.siblings.length > 0 && (
+              <div>
+                <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3 font-semibold">Siblings</p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {parentData.siblings.map((sibling, index) => (
+                    <div key={index} className="rounded-xl border border-border/60 bg-muted/20 p-4">
+                      <div className="flex items-start gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                          <Users className="w-6 h-6 text-blue-500" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{sibling.name}</h4>
+                          <p className="text-xs text-muted-foreground mt-1">Age: {sibling.age}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="text-muted-foreground text-xs">Education</span>
+                          <p className="font-medium">{sibling.education}</p>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground text-xs">Phone</span>
+                          <div className="flex items-center gap-2">
+                            <Phone className="w-4 h-4 text-muted-foreground" />
+                            <span className="font-medium">{sibling.phone}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </SectionCard>
       </div>

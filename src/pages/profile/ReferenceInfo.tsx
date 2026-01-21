@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
-import { User, Phone, MapPin } from 'lucide-react';
+import { User, Phone, MapPin, Plus, ChevronDown } from 'lucide-react';
 
 const references = [
   {
@@ -30,20 +31,87 @@ const references = [
 ];
 
 export default function ReferenceInfo() {
+  const [filter, setFilter] = useState<'all' | 'references' | 'relatives'>('all');
+  const [showAddMenu, setShowAddMenu] = useState(false);
+
+  const categorizedReferences = references.map((ref, index) => ({
+    ...ref,
+    type: index < 2 ? 'references' : 'relatives',
+  }));
+
+  const filtered = categorizedReferences.filter((ref) => {
+    if (filter === 'all') return true;
+    return ref.type === filter;
+  });
+
   return (
     <div className="animate-fade-in max-w-4xl">
       <PageHeader
-        title="Reference Information"
+        title="Reference and Relatives in this Institution"
         subtitle="Emergency contacts and references"
         breadcrumbs={[
           { label: 'Profile', path: '/profile/basic' },
           { label: 'References' },
         ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <button
+                onClick={() => setShowAddMenu(!showAddMenu)}
+                className="btn-primary flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add
+              </button>
+              {showAddMenu && (
+                <div className="absolute right-0 mt-2 w-40 bg-card border border-border rounded-lg shadow-lg z-10">
+                  <button
+                    onClick={() => {
+                      setShowAddMenu(false);
+                      // Handle add reference
+                    }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-muted text-sm rounded-t-lg transition-colors"
+                  >
+                    Reference
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAddMenu(false);
+                      // Handle add relative
+                    }}
+                    className="w-full text-left px-4 py-2.5 hover:bg-muted text-sm rounded-b-lg transition-colors border-t border-border"
+                  >
+                    Relative
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as typeof filter)}
+                className="appearance-none input-field py-2 pr-8 cursor-pointer"
+                aria-label="Filter references"
+              >
+                <option value="all">All</option>
+                <option value="references">References</option>
+                <option value="relatives">Relatives</option>
+              </select>
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none text-muted-foreground" />
+            </div>
+          </div>
+        }
       />
 
       <div className="grid gap-6">
-        {references.map((ref, index) => (
-          <SectionCard key={ref.id} title={`Reference ${index + 1}`}>
+        {filtered.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <User className="w-12 h-12 mx-auto mb-3 opacity-50" />
+            <p>No {filter !== 'all' ? filter : 'references or relatives'} to show.</p>
+          </div>
+        ) : (
+          filtered.map((ref, index) => (
+            <SectionCard key={ref.id} title={`${ref.type === 'references' ? 'Reference' : 'Relative'} ${index + 1}`}>
             <div className="flex items-start gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
                 <User className="w-6 h-6 text-secondary" />
@@ -64,8 +132,9 @@ export default function ReferenceInfo() {
                 <span>{ref.address}</span>
               </div>
             </div>
-          </SectionCard>
-        ))}
+            </SectionCard>
+          ))
+        )}
       </div>
     </div>
   );
