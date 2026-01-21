@@ -1,10 +1,12 @@
 import { useAuth } from '@/context/AuthContext';
 import { Bell, Search } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const { user } = useAuth();
   const [notifications] = useState(3);
+  const navigate = useNavigate();
 
   return (
     <header className="h-16 bg-card border-b border-border px-6 flex items-center justify-between sticky top-0 z-30">
@@ -23,7 +25,11 @@ export default function Navbar() {
       {/* Right side */}
       <div className="flex items-center gap-4">
         {/* Notifications */}
-        <button className="relative p-2 rounded-lg hover:bg-muted transition-colors">
+        <button
+          className="relative p-2 rounded-lg hover:bg-muted transition-colors"
+          onClick={() => navigate('/notifications')}
+          aria-label="Open notifications"
+        >
           <Bell className="w-5 h-5 text-muted-foreground" />
           {notifications > 0 && (
             <span className="absolute top-1 right-1 w-4 h-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">

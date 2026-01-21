@@ -7,6 +7,7 @@ import {
   GraduationCap,
   FolderOpen,
   BookOpen,
+  Bell,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -21,6 +22,7 @@ import { useState } from 'react';
 
 const mainNavItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/notifications', label: 'Notifications', icon: Bell },
 ];
 
 const profileNavItems = [

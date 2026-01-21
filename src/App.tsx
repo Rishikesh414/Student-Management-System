@@ -36,6 +36,9 @@ import Disciplinary from "@/pages/records/Disciplinary";
 import Materials from "@/pages/knowledge/Materials";
 import Discussions from "@/pages/knowledge/Discussions";
 
+// Notifications
+import Notifications from "@/pages/notifications/Notifications";
+
 // Errors
 import Unauthorized from "@/pages/errors/Unauthorized";
 import NotFound from "@/pages/NotFound";
@@ -85,6 +88,9 @@ const App = () => (
               {/* Knowledge */}
               <Route path="/knowledge/materials" element={<Materials />} />
               <Route path="/knowledge/discussions" element={<Discussions />} />
+
+              {/* Notifications */}
+              <Route path="/notifications" element={<Notifications />} />
             </Route>
 
             {/* Catch-all */}
