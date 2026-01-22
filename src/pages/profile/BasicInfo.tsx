@@ -6,6 +6,7 @@ import { User } from 'lucide-react';
 // Mock additional data
 const basicInfoData = {
   rollNo: '21CS101',
+  registerNo: '921023104008',
   admissionNo: 'ADM2021-001',
   name: 'Rahul Sharma',
   department: 'Computer Science',
@@ -71,6 +72,7 @@ export default function BasicInfo() {
           <div className="divide-y divide-border/50">
             <InfoRow label="Admission Number" value={basicInfoData.admissionNo} />
             <InfoRow label="Roll Number" value={basicInfoData.rollNo} />
+            <InfoRow label="Register Number" value={basicInfoData.registerNo} />
             <InfoRow label="Full Name" value={basicInfoData.name} />
             <InfoRow label="Department" value={basicInfoData.department} />
             <InfoRow label="Year" value={`${basicInfoData.year} Year`} />

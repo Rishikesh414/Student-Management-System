@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
-import { Save, X, Check } from 'lucide-react';
+import { Save, X, Edit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const personalData = {
   email: 'rahul.sharma@student.university.edu',
+  linkedinUrl: 'https://linkedin.com/in/rahul-sharma',
   phone: '+91 98765 43210',
   alternatePhone: '+91 87654 32109',
   address: '123 Main Street, Sector 15',
@@ -27,6 +28,7 @@ export default function PersonalInfo() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     email: personalData.email,
+    linkedinUrl: personalData.linkedinUrl,
     phone: personalData.phone,
     alternatePhone: personalData.alternatePhone,
     address: personalData.address,
@@ -51,6 +53,7 @@ export default function PersonalInfo() {
   const handleCancel = () => {
     setFormData({
       email: personalData.email,
+      linkedinUrl: personalData.linkedinUrl,
       phone: personalData.phone,
       alternatePhone: personalData.alternatePhone,
       address: personalData.address,
@@ -78,7 +81,7 @@ export default function PersonalInfo() {
           title="Personal Details"
           subtitle="Manage your personal, contact, and address information"
           actions={
-            isEditing && (
+            isEditing ? (
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCancel}
@@ -102,6 +105,15 @@ export default function PersonalInfo() {
                   )}
                 </button>
               </div>
+            ) : (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
+                title="Edit personal details"
+              >
+                <Edit className="w-4 h-4" />
+                Edit
+              </button>
             )
           }
         >
@@ -109,27 +121,27 @@ export default function PersonalInfo() {
             {/* Core personal details (read-only) */}
             <div className="grid gap-4 sm:grid-cols-4">
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Date of Birth</label>
-                <p className="font-medium">{personalData.dob}</p>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Date of Birth</label>
+                <p className="text-base font-semibold text-slate-900">{personalData.dob}</p>
               </div>
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Gender</label>
-                <p className="font-medium">{personalData.gender}</p>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Gender</label>
+                <p className="text-base font-semibold text-slate-900">{personalData.gender}</p>
               </div>
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Blood Group</label>
-                <p className="font-medium">{personalData.bloodGroup}</p>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Blood Group</label>
+                <p className="text-base font-semibold text-slate-900">{personalData.bloodGroup}</p>
               </div>
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Mother Tongue</label>
-                <p className="font-medium">{personalData.motherTongue}</p>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Mother Tongue</label>
+                <p className="text-base font-semibold text-slate-900">{personalData.motherTongue}</p>
               </div>
             </div>
 
             {/* Contact information (editable) */}
             <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Email Address</label>
+              <label className="block text-xs font-medium text-gray-500 mb-2">Email Address</label>
               {isEditing ? (
                 <input
                   type="email"
@@ -138,12 +150,25 @@ export default function PersonalInfo() {
                   className="input-field"
                 />
               ) : (
-                <p className="py-2.5">{formData.email}</p>
+                <p className="py-2.5 text-base font-semibold text-slate-900">{formData.email}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-2">LinkedIn URL</label>
+              {isEditing ? (
+                <input
+                  type="url"
+                  value={formData.linkedinUrl}
+                  onChange={(e) => setFormData({ ...formData, linkedinUrl: e.target.value })}
+                  className="input-field"
+                />
+              ) : (
+                <p className="py-2.5 text-base font-semibold text-slate-900">{formData.linkedinUrl}</p>
               )}
             </div>
               <div className="grid gap-4 sm:grid-cols-2">
             <div>
-                  <label className="block text-sm font-medium mb-2">Mobile Number</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-2">Mobile Number</label>
               {isEditing ? (
                 <input
                   type="tel"
@@ -152,11 +177,11 @@ export default function PersonalInfo() {
                   className="input-field"
                 />
               ) : (
-                <p className="py-2.5">{formData.phone}</p>
+                <p className="py-2.5 text-base font-semibold text-slate-900">{formData.phone}</p>
               )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Alternate Mobile Number</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-2">Alternate Mobile Number</label>
                   {isEditing ? (
                     <input
                       type="tel"
@@ -165,7 +190,7 @@ export default function PersonalInfo() {
                       className="input-field"
                     />
                   ) : (
-                    <p className="py-2.5">{formData.alternatePhone}</p>
+                    <p className="py-2.5 text-base font-semibold text-slate-900">{formData.alternatePhone}</p>
                   )}
                 </div>
             </div>
@@ -174,7 +199,7 @@ export default function PersonalInfo() {
             {/* Address details (editable) */}
           <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium mb-2">Street Address</label>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Street Address</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -183,11 +208,11 @@ export default function PersonalInfo() {
                     className="input-field"
                   />
                 ) : (
-                  <p className="py-2.5">{formData.address}</p>
+                  <p className="py-2.5 text-base font-semibold text-slate-900">{formData.address}</p>
                 )}
             </div>
             <div>
-                <label className="block text-sm font-medium mb-2">City</label>
+                <label className="block text-xs font-medium text-gray-500 mb-2">City</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -196,11 +221,11 @@ export default function PersonalInfo() {
                     className="input-field"
                   />
                 ) : (
-                  <p className="py-2.5">{formData.city}</p>
+                  <p className="py-2.5 text-base font-semibold text-slate-900">{formData.city}</p>
                 )}
             </div>
             <div>
-                <label className="block text-sm font-medium mb-2">State</label>
+                <label className="block text-xs font-medium text-gray-500 mb-2">State</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -209,11 +234,11 @@ export default function PersonalInfo() {
                     className="input-field"
                   />
                 ) : (
-                  <p className="py-2.5">{formData.state}</p>
+                  <p className="py-2.5 text-base font-semibold text-slate-900">{formData.state}</p>
                 )}
             </div>
             <div>
-                <label className="block text-sm font-medium mb-2">Pin Code</label>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Pin Code</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -222,7 +247,7 @@ export default function PersonalInfo() {
                     className="input-field"
                   />
                 ) : (
-                  <p className="py-2.5">{formData.pincode}</p>
+                  <p className="py-2.5 text-base font-semibold text-slate-900">{formData.pincode}</p>
                 )}
             </div>
           </div>
@@ -230,20 +255,20 @@ export default function PersonalInfo() {
             {/* Other details (read-only) */}
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="block text-sm text-muted-foreground mb-1">Nationality</label>
-              <p className="font-medium">{personalData.nationality}</p>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Nationality</label>
+              <p className="text-base font-semibold text-slate-900">{personalData.nationality}</p>
             </div>
             <div>
-              <label className="block text-sm text-muted-foreground mb-1">Religion</label>
-              <p className="font-medium">{personalData.religion}</p>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Religion</label>
+              <p className="text-base font-semibold text-slate-900">{personalData.religion}</p>
             </div>
             <div>
-              <label className="block text-sm text-muted-foreground mb-1">Category</label>
-              <p className="font-medium">{personalData.category}</p>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
+              <p className="text-base font-semibold text-slate-900">{personalData.category}</p>
             </div>
             <div>
-              <label className="block text-sm text-muted-foreground mb-1">Aadhar Number</label>
-              <p className="font-medium">{personalData.aadharNo}</p>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Aadhar Number</label>
+              <p className="text-base font-semibold text-slate-900">{personalData.aadharNo}</p>
               </div>
             </div>
           </div>
