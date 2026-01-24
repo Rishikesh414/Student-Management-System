@@ -9,6 +9,22 @@ const marksData = {
   5: {
     sgpa: 8.65,
     totalCredits: 24,
+    internal1: [
+      { code: 'CS501', subject: 'Data Structures', internal: 36, assessment: 24, total: 60 },
+      { code: 'CS502', subject: 'Database Systems', internal: 34, assessment: 26, total: 60 },
+      { code: 'CS503', subject: 'Operating Systems', internal: 30, assessment: 28, total: 58 },
+      { code: 'CS504', subject: 'Computer Networks', internal: 38, assessment: 22, total: 60 },
+      { code: 'CS505', subject: 'Software Engineering', internal: 32, assessment: 26, total: 58 },
+      { code: 'CS506', subject: 'Lab Practice', internal: 40, assessment: 20, total: 60 },
+    ],
+    internal2: [
+      { code: 'CS501', subject: 'Data Structures', internal: 35, assessment: 23, total: 58 },
+      { code: 'CS502', subject: 'Database Systems', internal: 32, assessment: 26, total: 58 },
+      { code: 'CS503', subject: 'Operating Systems', internal: 32, assessment: 28, total: 60 },
+      { code: 'CS504', subject: 'Computer Networks', internal: 36, assessment: 24, total: 60 },
+      { code: 'CS505', subject: 'Software Engineering', internal: 30, assessment: 26, total: 56 },
+      { code: 'CS506', subject: 'Lab Practice', internal: 32, assessment: 25, total: 57 },
+    ],
     subjects: [
       { code: 'CS501', name: 'Data Structures', credits: 4, internal: 42, external: 58, total: 100, grade: 'A+' },
       { code: 'CS502', name: 'Database Systems', credits: 4, internal: 38, external: 52, total: 90, grade: 'A' },
@@ -21,6 +37,22 @@ const marksData = {
   4: {
     sgpa: 8.45,
     totalCredits: 24,
+    internal1: [
+      { code: 'CS401', subject: 'Discrete Mathematics', internal: 36, assessment: 24, total: 60 },
+      { code: 'CS402', subject: 'Digital Logic', internal: 30, assessment: 28, total: 58 },
+      { code: 'CS403', subject: 'Object Oriented Programming', internal: 34, assessment: 26, total: 60 },
+      { code: 'CS404', subject: 'Computer Architecture', internal: 32, assessment: 26, total: 58 },
+      { code: 'CS405', subject: 'Data Communication', internal: 30, assessment: 26, total: 56 },
+      { code: 'CS406', subject: 'Lab Practice', internal: 36, assessment: 24, total: 60 },
+    ],
+    internal2: [
+      { code: 'CS401', subject: 'Discrete Mathematics', internal: 34, assessment: 26, total: 60 },
+      { code: 'CS402', subject: 'Digital Logic', internal: 32, assessment: 28, total: 60 },
+      { code: 'CS403', subject: 'Object Oriented Programming', internal: 32, assessment: 26, total: 58 },
+      { code: 'CS404', subject: 'Computer Architecture', internal: 32, assessment: 26, total: 58 },
+      { code: 'CS405', subject: 'Data Communication', internal: 32, assessment: 24, total: 56 },
+      { code: 'CS406', subject: 'Lab Practice', internal: 34, assessment: 26, total: 60 },
+    ],
     subjects: [
       { code: 'CS401', name: 'Discrete Mathematics', credits: 4, internal: 40, external: 52, total: 92, grade: 'A+' },
       { code: 'CS402', name: 'Digital Logic', credits: 4, internal: 35, external: 45, total: 80, grade: 'B+' },
@@ -112,6 +144,90 @@ export default function Marks() {
           </div>
         </div>
       </div>
+
+      {/* Internal 1 Container */}
+      <SectionCard title={`Semester ${selectedSemester} - Internal 1`} subtitle="Assessment breakdown">
+        <div className="table-container">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Subject</th>
+                <th className="text-center">Internal (60)</th>
+                <th className="text-center">Assessment (40)</th>
+                <th className="text-center">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.internal1.map((item) => (
+                <tr key={`${item.code}-internal1`}>
+                  <td className="font-mono text-sm">{item.code}</td>
+                  <td className="font-medium">{item.subject}</td>
+                  <td className="text-center">{item.internal}</td>
+                  <td className="text-center">{item.assessment}</td>
+                  <td className="text-center font-semibold">{item.total}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="bg-muted/50">
+                <td colSpan={2} className="font-semibold">Total</td>
+                <td className="text-center font-semibold">
+                  {data.internal1.reduce((sum, s) => sum + s.internal, 0)}
+                </td>
+                <td className="text-center font-semibold">
+                  {data.internal1.reduce((sum, s) => sum + s.assessment, 0)}
+                </td>
+                <td className="text-center font-semibold">
+                  {data.internal1.reduce((sum, s) => sum + s.total, 0)}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </SectionCard>
+
+      {/* Internal 2 Container */}
+      <SectionCard title={`Semester ${selectedSemester} - Internal 2`} subtitle="Assessment breakdown">
+        <div className="table-container">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Subject</th>
+                <th className="text-center">Internal (60)</th>
+                <th className="text-center">Assessment (40)</th>
+                <th className="text-center">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.internal2.map((item) => (
+                <tr key={`${item.code}-internal2`}>
+                  <td className="font-mono text-sm">{item.code}</td>
+                  <td className="font-medium">{item.subject}</td>
+                  <td className="text-center">{item.internal}</td>
+                  <td className="text-center">{item.assessment}</td>
+                  <td className="text-center font-semibold">{item.total}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="bg-muted/50">
+                <td colSpan={2} className="font-semibold">Total</td>
+                <td className="text-center font-semibold">
+                  {data.internal2.reduce((sum, s) => sum + s.internal, 0)}
+                </td>
+                <td className="text-center font-semibold">
+                  {data.internal2.reduce((sum, s) => sum + s.assessment, 0)}
+                </td>
+                <td className="text-center font-semibold">
+                  {data.internal2.reduce((sum, s) => sum + s.total, 0)}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </SectionCard>
 
       {/* Marks Table */}
       <SectionCard title={`Semester ${selectedSemester} Results`} subtitle="Internal + External marks breakdown">
