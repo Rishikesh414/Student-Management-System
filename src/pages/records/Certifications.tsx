@@ -3,7 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import Modal from '@/components/common/Modal';
 import Badge from '@/components/common/Badge';
-import { Plus, ExternalLink, Award, Edit2, Trash2, Calendar } from 'lucide-react';
+import { Plus, ExternalLink, Award, Trash2, Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/utils/formatDate';
 
@@ -166,12 +166,6 @@ export default function Certifications() {
                     <p className="text-muted-foreground">{cert.issuer}</p>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => handleEdit(cert)}
-                      className="p-2 rounded-lg hover:bg-muted transition-colors"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
                     <button
                       onClick={() => handleDelete(cert.id)}
                       className="p-2 rounded-lg hover:bg-destructive/10 text-destructive transition-colors"

@@ -36,6 +36,7 @@ const academicNavItems = [
   { path: '/academics/attendance', label: 'Attendance', icon: Calendar },
   { path: '/academics/marks', label: 'Marks', icon: Award },
   { path: '/academics/timetable', label: 'Timetable', icon: Calendar },
+  { path: '/academics/leave', label: 'Leave', icon: FileText },
 ];
 
 const recordsNavItems = [

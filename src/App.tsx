@@ -26,6 +26,7 @@ import Photos from "@/pages/profile/Photos";
 import Attendance from "@/pages/academics/Attendance";
 import Marks from "@/pages/academics/Marks";
 import Timetable from "@/pages/academics/Timetable";
+import Leave from "@/pages/academics/Leave";
 
 // Records
 import Projects from "@/pages/records/Projects";
@@ -79,6 +80,7 @@ const App = () => (
               <Route path="/academics/attendance" element={<Attendance />} />
               <Route path="/academics/marks" element={<Marks />} />
               <Route path="/academics/timetable" element={<Timetable />} />
+              <Route path="/academics/leave" element={<Leave />} />
 
               {/* Records */}
               <Route path="/records/projects" element={<Projects />} />
