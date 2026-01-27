@@ -1,0 +1,39 @@
+import { NavLink, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+
+interface KnowledgeNavItem {
+  path: string;
+  label: string;
+}
+
+const knowledgeNavItems: KnowledgeNavItem[] = [
+  { path: '/knowledge/materials', label: 'Materials' },
+  { path: '/knowledge/discussions', label: 'Discussions' },
+];
+
+export default function KnowledgeNavBar() {
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <div className="mb-6">
+      <nav className="flex flex-wrap gap-2 border-b border-border">
+        {knowledgeNavItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={cn(
+              'px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px',
+              isActive(item.path)
+                ? 'text-primary border-primary'
+                : 'text-muted-foreground border-transparent hover:text-foreground'
+            )}
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
+    </div>
+  );
+}

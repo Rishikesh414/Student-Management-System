@@ -3,6 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import Modal from '@/components/common/Modal';
 import Badge from '@/components/common/Badge';
+import RecordsNavBar from '@/components/layout/RecordsNavBar';
 import { Plus, ExternalLink, Award, Trash2, Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/utils/formatDate';
@@ -150,6 +151,8 @@ export default function Certifications() {
           </button>
         }
       />
+
+      <RecordsNavBar />
 
       <div className="space-y-4">
         {certifications.map((cert, index) => (

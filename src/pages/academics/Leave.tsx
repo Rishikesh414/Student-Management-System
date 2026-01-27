@@ -3,6 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import Badge from '@/components/common/Badge';
 import Modal from '@/components/common/Modal';
+import AcademicsNavBar from '@/components/layout/AcademicsNavBar';
 import { Plus, Calendar, Send, CheckCircle, Clock, XCircle, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/utils/formatDate';
@@ -200,6 +201,8 @@ export default function Leave() {
           </button>
         }
       />
+
+      <AcademicsNavBar />
 
       {/* Statistics Cards */}
       <div className="grid gap-4 sm:grid-cols-3 mb-6">

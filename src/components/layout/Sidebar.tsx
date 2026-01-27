@@ -78,8 +78,8 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
   }) => {
     const isExpanded = expandedSection === sectionKey || isSectionActive(items);
     
-    // For Profile and Announcements sections, make them navigate directly without dropdown
-    if (sectionKey === 'profile' || sectionKey === 'announcements') {
+    // For Profile, Announcements, Academics, Records, and Knowledge sections, make them navigate directly without dropdown
+    if (sectionKey === 'profile' || sectionKey === 'announcements' || sectionKey === 'academics' || sectionKey === 'records' || sectionKey === 'knowledge') {
       const IconComponent = items[0].icon;
       return (
         <div className="mb-2">

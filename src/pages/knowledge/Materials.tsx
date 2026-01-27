@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import Badge from '@/components/common/Badge';
+import KnowledgeNavBar from '@/components/layout/KnowledgeNavBar';
 import { Search, FileText, Download, Eye, Filter, BookOpen, File, Presentation } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 
@@ -115,6 +116,8 @@ export default function Materials() {
           { label: 'Materials' },
         ]}
       />
+
+      <KnowledgeNavBar />
 
       {/* Search and Filter */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">

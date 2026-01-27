@@ -3,6 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import Modal from '@/components/common/Modal';
 import Badge from '@/components/common/Badge';
+import KnowledgeNavBar from '@/components/layout/KnowledgeNavBar';
 import { MessageSquare, ThumbsUp, Send, Plus, Clock, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/utils/formatDate';
@@ -170,6 +171,8 @@ export default function Discussions() {
           </button>
         }
       />
+
+      <KnowledgeNavBar />
 
       {/* Discussion List */}
       <div className="space-y-4">

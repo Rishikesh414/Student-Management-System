@@ -1,5 +1,6 @@
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
+import AcademicsNavBar from '@/components/layout/AcademicsNavBar';
 
 export default function Timetable() {
   return (
@@ -12,6 +13,8 @@ export default function Timetable() {
           { label: 'Timetable' },
         ]}
       />
+
+      <AcademicsNavBar />
 
       <SectionCard title="Timetable">
         <div className="py-12 text-center text-muted-foreground">

@@ -3,6 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProgressBar from '@/components/common/ProgressBar';
 import Badge from '@/components/common/Badge';
+import AcademicsNavBar from '@/components/layout/AcademicsNavBar';
 import { getAttendanceStatus, getAttendanceMessage, calculateAttendancePercentage } from '@/utils/calculateAttendance';
 import { SEMESTERS, ATTENDANCE_THRESHOLD } from '@/utils/constants';
 import { Calendar, AlertTriangle, CheckCircle } from 'lucide-react';
@@ -62,6 +63,8 @@ export default function Attendance() {
           </select>
         }
       />
+
+      <AcademicsNavBar />
 
       {/* Low Attendance Alert */}
       {lowAttendanceSubjects.length > 0 && (
