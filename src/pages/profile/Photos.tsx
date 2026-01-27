@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
+import ProfileNavBar from '@/components/layout/ProfileNavBar';
 import { Upload, Camera, Users, X, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -115,6 +116,8 @@ export default function Photos() {
           { label: 'Photos' },
         ]}
       />
+
+      <ProfileNavBar />
 
       <div className="grid gap-6 sm:grid-cols-2">
         <PhotoUploadCard

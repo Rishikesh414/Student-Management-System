@@ -1,6 +1,7 @@
 import { useAuth } from '@/context/AuthContext';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
+import ProfileNavBar from '@/components/layout/ProfileNavBar';
 import { User } from 'lucide-react';
 
 // Mock additional data
@@ -48,6 +49,8 @@ export default function BasicInfo() {
           { label: 'Basic Info' },
         ]}
       />
+
+      <ProfileNavBar />
 
       <div className="grid gap-6">
         {/* Profile Header */}

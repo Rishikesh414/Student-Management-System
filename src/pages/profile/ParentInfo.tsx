@@ -1,5 +1,6 @@
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
+import ProfileNavBar from '@/components/layout/ProfileNavBar';
 import { User, Phone, Briefcase, Users } from 'lucide-react';
 
 const parentData = {
@@ -52,6 +53,8 @@ export default function ParentInfo() {
           { label: 'Parent Info' },
         ]}
       />
+
+      <ProfileNavBar />
 
       <div className="grid gap-6">
         <SectionCard title="Parent & Guardian Details">

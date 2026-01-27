@@ -38,6 +38,9 @@ import Discussions from "@/pages/knowledge/Discussions";
 // Notifications
 import Notifications from "@/pages/notifications/Notifications";
 
+// Announcements
+import Announcements from "@/pages/announcements/Announcements";
+
 // Errors
 import Unauthorized from "@/pages/errors/Unauthorized";
 import NotFound from "@/pages/NotFound";
@@ -89,6 +92,9 @@ const App = () => (
 
               {/* Notifications */}
               <Route path="/notifications" element={<Notifications />} />
+
+              {/* Announcements */}
+              <Route path="/announcements" element={<Announcements />} />
             </Route>
 
             {/* Catch-all */}

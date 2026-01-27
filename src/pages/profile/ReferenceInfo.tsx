@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
+import ProfileNavBar from '@/components/layout/ProfileNavBar';
 import { User, Phone, MapPin, Plus, ChevronDown, X, Edit, Trash2, MoreVertical } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
@@ -215,6 +216,8 @@ export default function ReferenceInfo() {
           { label: 'References' },
         ]}
       />
+
+      <ProfileNavBar />
 
       <div className="grid gap-6">
         {filtered.length === 0 ? (

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
+import ProfileNavBar from '@/components/layout/ProfileNavBar';
 import { Save, X, Edit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -74,6 +75,8 @@ export default function PersonalInfo() {
           { label: 'Personal Info' },
         ]}
       />
+
+      <ProfileNavBar />
 
       <div className="grid gap-6">
         {/* Unified Personal Details Card */}

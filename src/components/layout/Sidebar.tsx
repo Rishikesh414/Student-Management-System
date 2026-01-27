@@ -17,6 +17,7 @@ import {
   MessageSquare,
   Users,
   AlertTriangle,
+  Megaphone,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -26,10 +27,6 @@ const mainNavItems = [
 
 const profileNavItems = [
   { path: '/profile/basic', label: 'Basic Info', icon: User },
-  { path: '/profile/personal', label: 'Personal Info', icon: FileText },
-  { path: '/profile/parent', label: 'Parent Info', icon: Users },
-  { path: '/profile/reference', label: 'References', icon: Users },
-  { path: '/profile/photos', label: 'Photos', icon: FileText },
 ];
 
 const academicNavItems = [
@@ -46,6 +43,10 @@ const recordsNavItems = [
 const knowledgeNavItems = [
   { path: '/knowledge/materials', label: 'Materials', icon: BookOpen },
   { path: '/knowledge/discussions', label: 'Discussions', icon: MessageSquare },
+];
+
+const announcementNavItems = [
+  { path: '/announcements', label: 'Announcements', icon: Megaphone },
 ];
 
 interface SidebarProps {
@@ -76,6 +77,26 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     sectionKey: string;
   }) => {
     const isExpanded = expandedSection === sectionKey || isSectionActive(items);
+    
+    // For Profile and Announcements sections, make them navigate directly without dropdown
+    if (sectionKey === 'profile' || sectionKey === 'announcements') {
+      const IconComponent = items[0].icon;
+      return (
+        <div className="mb-2">
+          <NavLink
+            to={items[0].path}
+            className={cn(
+              'nav-link',
+              isActive(items[0].path) && 'nav-link-active'
+            )}
+            title={isCollapsed ? title : undefined}
+          >
+            <IconComponent className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && <span>{title}</span>}
+          </NavLink>
+        </div>
+      );
+    }
     
     return (
       <div className="mb-2">
@@ -190,6 +211,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         <NavSection title="Academics" items={academicNavItems} sectionKey="academics" />
         <NavSection title="Records" items={recordsNavItems} sectionKey="records" />
         <NavSection title="Knowledge" items={knowledgeNavItems} sectionKey="knowledge" />
+        <NavSection title="Announcements" items={announcementNavItems} sectionKey="announcements" />
       </nav>
 
       {/* Logout */}
