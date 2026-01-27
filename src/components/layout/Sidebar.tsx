@@ -40,7 +40,6 @@ const academicNavItems = [
 ];
 
 const recordsNavItems = [
-  { path: '/records/projects', label: 'Projects', icon: FolderOpen },
   { path: '/records/certifications', label: 'Certifications', icon: Award },
 ];
 

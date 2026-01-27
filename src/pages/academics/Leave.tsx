@@ -73,7 +73,7 @@ export default function Leave() {
     startDate: '',
     endDate: '',
     reason: '',
-    type: 'Personal',
+    type: 'On-duty',
     recipient: 'Class Incharge',
   });
 
@@ -143,7 +143,7 @@ export default function Leave() {
       startDate: '',
       endDate: '',
       reason: '',
-      type: 'Personal',
+      type: 'On-duty',
       recipient: 'Class Incharge',
     });
   };
@@ -260,7 +260,7 @@ export default function Leave() {
       {/* Leave Requests */}
       <div className="space-y-4">
         {filteredRequests.length === 0 ? (
-          <SectionCard>
+          <SectionCard title="Leave Requests">
             <div className="text-center py-8">
               <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
               <p className="text-muted-foreground">No leave requests found</p>
@@ -388,10 +388,9 @@ export default function Leave() {
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               className="input-field"
             >
-              <option value="Personal">Personal</option>
-              <option value="Medical">Medical</option>
+              <option value="Leave">Leave</option>
+              <option value="Absent">Absent</option>
               <option value="On-duty">On-duty</option>
-              <option value="Other">Other</option>
             </select>
           </div>
 

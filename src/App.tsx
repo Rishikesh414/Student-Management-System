@@ -29,7 +29,6 @@ import Timetable from "@/pages/academics/Timetable";
 import Leave from "@/pages/academics/Leave";
 
 // Records
-import Projects from "@/pages/records/Projects";
 import Certifications from "@/pages/records/Certifications";
 
 // Knowledge
@@ -82,7 +81,6 @@ const App = () => (
               <Route path="/academics/leave" element={<Leave />} />
 
               {/* Records */}
-              <Route path="/records/projects" element={<Projects />} />
               <Route path="/records/certifications" element={<Certifications />} />
 
               {/* Knowledge */}
