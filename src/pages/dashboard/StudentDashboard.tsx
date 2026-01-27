@@ -118,30 +118,6 @@ export default function StudentDashboard() {
             </div>
           </div>
         </SectionCard>
-
-        {/* Today's Schedule */}
-        <SectionCard title="Today's Classes" subtitle="Upcoming schedule">
-          <div className="space-y-3">
-            {dashboardData.upcomingClasses.map((cls, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-4 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-              >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium">{cls.subject}</p>
-                  <p className="text-sm text-muted-foreground">Room {cls.room}</p>
-                </div>
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4" />
-                  {cls.time}
-                </div>
-              </div>
-            ))}
-          </div>
-        </SectionCard>
       </div>
 
       {/* Recent Marks */}
