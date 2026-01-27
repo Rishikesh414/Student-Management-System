@@ -214,48 +214,6 @@ export default function ReferenceInfo() {
           { label: 'Profile', path: '/profile/basic' },
           { label: 'References' },
         ]}
-        actions={
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <button
-                onClick={() => setShowAddMenu(!showAddMenu)}
-                className="btn-primary flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Add
-              </button>
-              {showAddMenu && (
-                <div className="absolute right-0 mt-2 w-40 bg-card border border-border rounded-lg shadow-lg z-10">
-                  <button
-                    onClick={() => handleAddClick('reference')}
-                    className="w-full text-left px-4 py-2.5 hover:bg-muted text-sm rounded-t-lg transition-colors"
-                  >
-                    Reference
-                  </button>
-                  <button
-                    onClick={() => handleAddClick('relative')}
-                    className="w-full text-left px-4 py-2.5 hover:bg-muted text-sm rounded-b-lg transition-colors border-t border-border"
-                  >
-                    Relative
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className="relative">
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value as typeof filter)}
-                className="appearance-none input-field py-2 pr-8 cursor-pointer"
-                aria-label="Filter references"
-              >
-                <option value="all">All</option>
-                <option value="references">References</option>
-                <option value="relatives">Relatives</option>
-              </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none text-muted-foreground" />
-            </div>
-          </div>
-        }
       />
 
       <div className="grid gap-6">
@@ -269,35 +227,6 @@ export default function ReferenceInfo() {
             <div key={ref.id} className="relative">
               <SectionCard 
                 title={`${ref.type === 'references' ? 'Reference' : 'Relative'} ${index + 1}`}
-                actions={
-                  <div className="relative">
-                    <button
-                      onClick={() => setOpenMenuId(openMenuId === ref.id ? null : ref.id)}
-                      className="p-1.5 hover:bg-muted rounded-lg transition-colors"
-                      title="Options"
-                    >
-                      <MoreVertical className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                    {openMenuId === ref.id && (
-                      <div className="absolute right-0 mt-1 w-32 bg-card border border-border rounded-lg shadow-lg z-20">
-                        <button
-                          onClick={() => handleEditClick(ref)}
-                          className="w-full text-left px-4 py-2.5 hover:bg-muted text-sm rounded-t-lg transition-colors flex items-center gap-2"
-                        >
-                          <Edit className="w-4 h-4" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(ref.id)}
-                          className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-sm rounded-b-lg transition-colors flex items-center gap-2 text-red-600 border-t border-border"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                }
               >
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
@@ -324,124 +253,6 @@ export default function ReferenceInfo() {
           ))
         )}
       </div>
-
-      {/* Add/Edit Reference/Relative Dialog */}
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {editingId ? 'Edit' : `Add ${addType === 'reference' ? 'Reference' : 'Relative'}`}
-            </DialogTitle>
-            <DialogClose />
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Enter full name"
-                className="input-field w-full"
-              />
-            </div>
-
-            {/* Relationship */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Relationship <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.relationship}
-                onChange={(e) => setFormData({ ...formData, relationship: e.target.value })}
-                className="input-field w-full"
-              >
-                <option value="">Select relationship</option>
-                {relationshipOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Occupation */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Occupation
-              </label>
-              <input
-                type="text"
-                value={formData.occupation}
-                onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
-                placeholder="Enter occupation (optional)"
-                className="input-field w-full"
-              />
-            </div>
-
-            {/* Mobile Number */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Mobile Number <span className="text-red-500">*</span>
-              </label>
-              <div className="flex gap-2">
-                <select
-                  value={formData.countryCode}
-                  onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                  className="input-field w-20"
-                >
-                  <option value="+91">+91</option>
-                  <option value="+1">+1</option>
-                  <option value="+44">+44</option>
-                  <option value="+61">+61</option>
-                </select>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '') })}
-                  placeholder="Enter phone number"
-                  className="input-field flex-1"
-                />
-              </div>
-            </div>
-
-            {/* Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Address
-              </label>
-              <textarea
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="Enter address"
-                rows={3}
-                className="input-field w-full resize-none"
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-3 pt-4">
-              <button
-                onClick={handleCancel}
-                className="flex-1 px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={isSaving}
-                className="flex-1 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
-              >
-                {isSaving ? 'Saving...' : editingId ? 'Update' : 'Add'}
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

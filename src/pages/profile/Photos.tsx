@@ -86,44 +86,20 @@ export default function Photos() {
               alt={title}
               className="w-48 h-48 object-cover rounded-xl border-2 border-border"
             />
-            <button
-              onClick={() => removePhoto(type)}
-              className="absolute -top-2 -right-2 w-8 h-8 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center shadow-lg hover:bg-destructive/90 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
             <div className="absolute bottom-2 right-2 w-6 h-6 bg-success text-success-foreground rounded-full flex items-center justify-center">
               <Check className="w-4 h-4" />
             </div>
           </div>
         ) : (
-          <label className="cursor-pointer group">
-            <div className="w-48 h-48 rounded-xl border-2 border-dashed border-border hover:border-primary bg-muted/30 hover:bg-muted/50 transition-colors flex flex-col items-center justify-center gap-3">
-              {uploading === type ? (
-                <div className="animate-pulse flex flex-col items-center gap-2">
-                  <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-                  <span className="text-sm text-muted-foreground">Uploading...</span>
-                </div>
-              ) : (
-                <>
-                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Icon className="w-7 h-7 text-primary" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm font-medium">Click to upload</p>
-                    <p className="text-xs text-muted-foreground">JPG, PNG, WebP (max 5MB)</p>
-                  </div>
-                </>
-              )}
+          <div className="w-48 h-48 rounded-xl border-2 border-dashed border-border bg-muted/30 flex flex-col items-center justify-center gap-3">
+            <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center">
+              <Icon className="w-7 h-7 text-muted-foreground" />
             </div>
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={(e) => handleFileChange(e, type)}
-              className="hidden"
-              disabled={uploading !== null}
-            />
-          </label>
+            <div className="text-center">
+              <p className="text-sm font-medium text-muted-foreground">No photo uploaded</p>
+              <p className="text-xs text-muted-foreground">Photo will appear here</p>
+            </div>
+          </div>
         )}
       </div>
     </SectionCard>
