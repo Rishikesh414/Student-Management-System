@@ -42,7 +42,6 @@ const academicNavItems = [
 const recordsNavItems = [
   { path: '/records/projects', label: 'Projects', icon: FolderOpen },
   { path: '/records/certifications', label: 'Certifications', icon: Award },
-  { path: '/records/disciplinary', label: 'Disciplinary', icon: AlertTriangle },
 ];
 
 const knowledgeNavItems = [

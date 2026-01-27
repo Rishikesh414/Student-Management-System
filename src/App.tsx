@@ -31,7 +31,6 @@ import Leave from "@/pages/academics/Leave";
 // Records
 import Projects from "@/pages/records/Projects";
 import Certifications from "@/pages/records/Certifications";
-import Disciplinary from "@/pages/records/Disciplinary";
 
 // Knowledge
 import Materials from "@/pages/knowledge/Materials";
@@ -85,7 +84,6 @@ const App = () => (
               {/* Records */}
               <Route path="/records/projects" element={<Projects />} />
               <Route path="/records/certifications" element={<Certifications />} />
-              <Route path="/records/disciplinary" element={<Disciplinary />} />
 
               {/* Knowledge */}
               <Route path="/knowledge/materials" element={<Materials />} />
