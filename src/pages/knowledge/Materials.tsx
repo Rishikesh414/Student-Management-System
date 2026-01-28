@@ -3,7 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import Badge from '@/components/common/Badge';
 import KnowledgeNavBar from '@/components/layout/KnowledgeNavBar';
-import { Search, FileText, Download, Eye, Filter, BookOpen, File, Presentation } from 'lucide-react';
+import { Search, FileText, Filter, BookOpen, File, Presentation, ExternalLink } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 
 interface Material {
@@ -16,6 +16,7 @@ interface Material {
   uploadDate: string;
   downloads: number;
   size: string;
+  link: string;
 }
 
 const materials: Material[] = [
@@ -29,6 +30,7 @@ const materials: Material[] = [
     uploadDate: '2024-01-10',
     downloads: 234,
     size: '4.5 MB',
+    link: 'https://classroom.google.com/c/data-structures',
   },
   {
     id: '2',
@@ -40,6 +42,7 @@ const materials: Material[] = [
     uploadDate: '2024-01-15',
     downloads: 189,
     size: '2.8 MB',
+    link: 'https://classroom.google.com/c/database-systems',
   },
   {
     id: '3',
@@ -51,6 +54,7 @@ const materials: Material[] = [
     uploadDate: '2024-01-20',
     downloads: 156,
     size: '6.2 MB',
+    link: 'https://classroom.google.com/c/operating-systems',
   },
   {
     id: '4',
@@ -62,6 +66,7 @@ const materials: Material[] = [
     uploadDate: '2024-02-01',
     downloads: 98,
     size: '1.5 MB',
+    link: 'https://classroom.google.com/c/computer-networks',
   },
   {
     id: '5',
@@ -73,6 +78,7 @@ const materials: Material[] = [
     uploadDate: '2024-02-10',
     downloads: 145,
     size: '3.2 MB',
+    link: 'https://classroom.google.com/c/software-engineering',
   },
 ];
 
@@ -175,15 +181,11 @@ export default function Materials() {
                   <span>{material.downloads} downloads</span>
                 </div>
 
-                <div className="flex items-center gap-2 mt-4">
-                  <button className="flex-1 btn-secondary py-2 flex items-center justify-center gap-2">
-                    <Eye className="w-4 h-4" />
-                    Preview
-                  </button>
-                  <button className="flex-1 btn-primary py-2 flex items-center justify-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Download
-                  </button>
+                <div className="mt-4">
+                  <a href={material.link} target="_blank" rel="noopener noreferrer" className="w-full btn-primary py-2 flex items-center justify-center gap-2">
+                    <ExternalLink className="w-4 h-4" />
+                    View on Google Classroom
+                  </a>
                 </div>
               </div>
             );

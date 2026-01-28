@@ -8,7 +8,7 @@ import { Award, TrendingUp, BookOpen } from 'lucide-react';
 
 const marksData = {
   5: {
-    sgpa: 8.65,
+    cgpa: 8.65,
     totalCredits: 24,
     internal1: [
       { code: 'CS501', subject: 'Data Structures', internal: 36, assessment: 24, total: 60 },
@@ -36,7 +36,7 @@ const marksData = {
     ],
   },
   4: {
-    sgpa: 8.45,
+    cgpa: 8.45,
     totalCredits: 24,
     internal1: [
       { code: 'CS401', subject: 'Discrete Mathematics', internal: 36, assessment: 24, total: 60 },
@@ -117,8 +117,8 @@ export default function Marks() {
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm opacity-80">SGPA</p>
-              <p className="text-2xl font-bold font-display">{data.sgpa.toFixed(2)}</p>
+              <p className="text-sm opacity-80">CGPA</p>
+              <p className="text-2xl font-bold font-display">{data.cgpa.toFixed(2)}</p>
             </div>
           </div>
         </div>
