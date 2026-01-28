@@ -18,6 +18,7 @@ import {
   Users,
   AlertTriangle,
   Megaphone,
+  Zap,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -47,6 +48,10 @@ const knowledgeNavItems = [
 
 const announcementNavItems = [
   { path: '/announcements', label: 'Announcements', icon: Megaphone },
+];
+
+const extracurricularNavItems = [
+  { path: '/extracurricular/sports', label: 'Extra-curricular Activity', icon: Zap },
 ];
 
 interface SidebarProps {
@@ -79,7 +84,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
     const isExpanded = expandedSection === sectionKey || isSectionActive(items);
     
     // For Profile, Announcements, Academics, Records, and Knowledge sections, make them navigate directly without dropdown
-    if (sectionKey === 'profile' || sectionKey === 'announcements' || sectionKey === 'academics' || sectionKey === 'records' || sectionKey === 'knowledge') {
+    if (sectionKey === 'profile' || sectionKey === 'announcements' || sectionKey === 'academics' || sectionKey === 'records' || sectionKey === 'knowledge' || sectionKey === 'extracurricular') {
       const IconComponent = items[0].icon;
       return (
         <div className="mb-2">
@@ -211,6 +216,7 @@ export default function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         <NavSection title="Academics" items={academicNavItems} sectionKey="academics" />
         <NavSection title="Records" items={recordsNavItems} sectionKey="records" />
         <NavSection title="Knowledge" items={knowledgeNavItems} sectionKey="knowledge" />
+        <NavSection title="Extra-curricular" items={extracurricularNavItems} sectionKey="extracurricular" />
         <NavSection title="Announcements" items={announcementNavItems} sectionKey="announcements" />
       </nav>
 

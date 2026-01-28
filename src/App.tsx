@@ -41,6 +41,9 @@ import Notifications from "@/pages/notifications/Notifications";
 // Announcements
 import Announcements from "@/pages/announcements/Announcements";
 
+// Extra-curricular
+import Extracurricular from "@/pages/extracurricular/Extracurricular";
+
 // Errors
 import Unauthorized from "@/pages/errors/Unauthorized";
 import NotFound from "@/pages/NotFound";
@@ -95,6 +98,10 @@ const App = () => (
 
               {/* Announcements */}
               <Route path="/announcements" element={<Announcements />} />
+
+              {/* Extra-curricular */}
+              <Route path="/extracurricular/sports" element={<Extracurricular />} />
+              <Route path="/extracurricular/events" element={<Extracurricular />} />
             </Route>
 
             {/* Catch-all */}
