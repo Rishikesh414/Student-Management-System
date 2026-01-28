@@ -18,22 +18,25 @@ export default function ExtraactivityNavBar() {
 
   return (
     <div className="mb-6">
-      <nav className="flex flex-wrap gap-2 border-b border-border">
+      <div className="inline-flex bg-gray-100 rounded-full p-1.5 gap-1.5 shadow-sm" style={{ borderRadius: '999px' }}>
         {extraactivityNavItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={cn(
-              'px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px',
+              'px-6 py-2.5 text-sm font-medium transition-all duration-200 ease-out whitespace-nowrap',
               isActive(item.path)
-                ? 'text-primary border-primary'
-                : 'text-muted-foreground border-transparent hover:text-foreground'
+                ? 'bg-white text-gray-900 shadow-md'
+                : 'bg-transparent text-gray-600 hover:text-gray-900'
             )}
+            style={{
+              borderRadius: '999px',
+            }}
           >
             {item.label}
           </NavLink>
         ))}
-      </nav>
+      </div>
     </div>
   );
 }
