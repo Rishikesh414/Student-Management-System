@@ -25,21 +25,20 @@ const personalData = {
   gender: 'Male',
   bloodGroup: 'O+',
   motherTongue: 'Hindi',
+  admissionNo: 'ADM2021-001',
+  batch: '2021-2025',
+  admissionDate: '2021-08-01',
+  residenceType: 'Hostel',
 };
 
 const basicInfoData = {
   rollNo: '21CS101',
   registerNo: '921023104008',
-  admissionNo: 'ADM2021-001',
   name: 'Rahul Sharma',
   department: 'Computer Science',
-  year: 3,
-  semester: 5,
-  section: 'A',
-  admissionDate: '2021-08-01',
-  batch: '2021-2025',
-  residenceType: 'Hostel',
+
 };
+
 
 /* -------------------- COMPONENT -------------------- */
 
@@ -171,9 +170,10 @@ export default function PersonalInfo() {
         title="Personal Information"
         subtitle="Manage your contact details"
         breadcrumbs={[
-          { label: 'Profile', path: '/profile/basic' },
-          { label: 'Personal Info' },
-        ]}
+              { label: 'Profile', path: '/profile/personal' },
+              { label: 'Personal Info' },
+            ]}
+
       />
 
       {/* Profile Header */}
@@ -227,6 +227,45 @@ export default function PersonalInfo() {
           title="Personal Details"
           subtitle="Manage your personal, contact, and address information"
         >
+          {/* Admission details */}
+          <div className="grid gap-4 sm:grid-cols-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                Admission Number
+              </label>
+              <p className="text-base font-semibold text-slate-900">
+                {personalData.admissionNo}
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                Batch
+              </label>
+              <p className="text-base font-semibold text-slate-900">
+                {personalData.batch}
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                Admission Date
+              </label>
+              <p className="text-base font-semibold text-slate-900">
+                {personalData.admissionDate}
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                Nature of Residence
+              </label>
+              <p className="text-base font-semibold text-slate-900">
+                {personalData.residenceType}
+              </p>
+            </div>
+          </div> <br /> 
+
           <div className="space-y-6">
             {/* Core personal details (read-only) */}
             <div className="grid gap-4 sm:grid-cols-4">
