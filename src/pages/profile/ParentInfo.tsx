@@ -3,6 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
 import { User, Phone, Briefcase, Users, Edit, Save, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 
 const parentData = {
@@ -48,11 +49,154 @@ export default function ParentInfo() {
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [editingParent, setEditingParent] = useState<'father' | 'mother' | 'guardian' | null>(null);
+  const [editingSiblingIndex, setEditingSiblingIndex] = useState<number | null>(null);
+  const [siblings, setSiblings] = useState(parentData.siblings);
   const [formData, setFormData] = useState({
     father: { ...parentData.father },
     mother: { ...parentData.mother },
     guardian: { ...parentData.guardian },
   });
+  const [dialogFormData, setDialogFormData] = useState({
+    name: '',
+    occupation: '',
+    phone: '',
+    email: '',
+    qualification: '',
+    annualIncome: '',
+    relation: '',
+    address: '',
+    age: '',
+    education: '',
+  });
+
+  const handleEditClick = (parent: 'father' | 'mother' | 'guardian') => {
+    setEditingParent(parent);
+    setEditingSiblingIndex(null);
+    if (parent === 'father' || parent === 'mother') {
+      setDialogFormData({
+        name: formData[parent].name,
+        occupation: formData[parent].occupation,
+        phone: formData[parent].phone,
+        email: formData[parent].email,
+        qualification: formData[parent].qualification,
+        annualIncome: formData[parent].annualIncome,
+        relation: '',
+        address: '',
+        age: '',
+        education: '',
+      });
+    } else {
+      setDialogFormData({
+        name: formData.guardian.name,
+        occupation: '',
+        phone: formData.guardian.phone,
+        email: '',
+        qualification: '',
+        annualIncome: '',
+        relation: formData.guardian.relation,
+        address: formData.guardian.address,
+        age: '',
+        education: '',
+      });
+    }
+    setShowDialog(true);
+  };
+
+  const handleEditSiblingClick = (index: number) => {
+    setEditingSiblingIndex(index);
+    setEditingParent(null);
+    setDialogFormData({
+      name: siblings[index].name,
+      occupation: '',
+      phone: siblings[index].phone,
+      email: '',
+      qualification: '',
+      annualIncome: '',
+      relation: '',
+      address: '',
+      age: siblings[index].age.toString(),
+      education: siblings[index].education,
+    });
+    setShowDialog(true);
+  };
+
+  const handleSaveDialog = async () => {
+    setIsSaving(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    if (editingSiblingIndex !== null) {
+      const updatedSiblings = [...siblings];
+      updatedSiblings[editingSiblingIndex] = {
+        ...updatedSiblings[editingSiblingIndex],
+        name: dialogFormData.name,
+        phone: dialogFormData.phone,
+        age: parseInt(dialogFormData.age) || updatedSiblings[editingSiblingIndex].age,
+        education: dialogFormData.education,
+      };
+      setSiblings(updatedSiblings);
+      toast({
+        title: 'Success',
+        description: 'Sibling information updated successfully.',
+      });
+    } else if (editingParent === 'father' || editingParent === 'mother') {
+      setFormData(prev => ({
+        ...prev,
+        [editingParent]: {
+          ...prev[editingParent],
+          name: dialogFormData.name,
+          occupation: dialogFormData.occupation,
+          phone: dialogFormData.phone,
+          email: dialogFormData.email,
+          qualification: dialogFormData.qualification,
+          annualIncome: dialogFormData.annualIncome,
+        },
+      }));
+      toast({
+        title: 'Success',
+        description: 'Information updated successfully.',
+      });
+    } else if (editingParent === 'guardian') {
+      setFormData(prev => ({
+        ...prev,
+        guardian: {
+          ...prev.guardian,
+          name: dialogFormData.name,
+          phone: dialogFormData.phone,
+          relation: dialogFormData.relation,
+          address: dialogFormData.address,
+        },
+      }));
+      toast({
+        title: 'Success',
+        description: 'Guardian information updated successfully.',
+      });
+    }
+
+    setIsSaving(false);
+    setShowDialog(false);
+    setEditingParent(null);
+    setEditingSiblingIndex(null);
+  };
+
+  const handleCancelDialog = () => {
+    setShowDialog(false);
+    setEditingParent(null);
+    setEditingSiblingIndex(null);
+    setDialogFormData({
+      name: '',
+      occupation: '',
+      phone: '',
+      email: '',
+      qualification: '',
+      annualIncome: '',
+      relation: '',
+      address: '',
+      age: '',
+      education: '',
+    });
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -101,138 +245,58 @@ export default function ParentInfo() {
       <div className="grid gap-6">
         <SectionCard 
           title="Parent & Guardian Details"
-          actions={
-            isEditing ? (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleCancel}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
-                >
-                  <X className="w-4 h-4" />
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="btn-primary flex items-center gap-2"
-                >
-                  {isSaving ? (
-                    <>Saving...</>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" />
-                      Save
-                    </>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
-                title="Edit parent information"
-              >
-                <Edit className="w-4 h-4" />
-                Edit
-              </button>
-            )
-          }
         >
           <div className="space-y-8">
             {/* Father & Mother in a single responsive row */}
             <div className="grid gap-6 md:grid-cols-2">
               {/* Father */}
               <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <User className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                      Father
-                    </p>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.father.name}
-                        onChange={(e) => handleInputChange('father', 'name', e.target.value)}
-                        className="font-semibold w-full px-2 py-1 rounded border border-input bg-background"
-                      />
-                    ) : (
+                <div className="flex items-start gap-3 mb-4 justify-between">
+                  <div className="flex items-start gap-3 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                        Father
+                      </p>
                       <h3 className="font-semibold">{formData.father.name}</h3>
-                    )}
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
-                      <Briefcase className="w-3 h-3" />
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.father.occupation}
-                          onChange={(e) => handleInputChange('father', 'occupation', e.target.value)}
-                          className="text-xs px-2 py-1 rounded border border-input bg-background flex-1"
-                        />
-                      ) : (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                        <Briefcase className="w-3 h-3" />
                         <span>{formData.father.occupation}</span>
-                      )}
+                      </div>
                     </div>
                   </div>
+                  <button
+                    onClick={() => handleEditClick('father')}
+                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
+                    title="Edit father's information"
+                  >
+                    <Edit className="w-3 h-3" />
+                    Edit
+                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm">
                   <div>
                     <span className="text-muted-foreground text-xs">Phone</span>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.father.phone}
-                        onChange={(e) => handleInputChange('father', 'phone', e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                      />
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Phone className="w-4 h-4 text-muted-foreground" />
-                        <span className="font-medium">{formData.father.phone}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium">{formData.father.phone}</span>
+                    </div>
                   </div>
                   <div>
                     <span className="text-muted-foreground text-xs">Email</span>
-                    {isEditing ? (
-                      <input
-                        type="email"
-                        value={formData.father.email}
-                        onChange={(e) => handleInputChange('father', 'email', e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                      />
-                    ) : (
-                      <p className="font-medium break-all">{formData.father.email}</p>
-                    )}
+                    <p className="font-medium break-all">{formData.father.email}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <span className="text-muted-foreground text-xs">Qualification</span>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.father.qualification}
-                          onChange={(e) => handleInputChange('father', 'qualification', e.target.value)}
-                          className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                        />
-                      ) : (
-                        <p className="font-medium">{formData.father.qualification}</p>
-                      )}
+                      <p className="font-medium">{formData.father.qualification}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground text-xs">Annual Income</span>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.father.annualIncome}
-                          onChange={(e) => handleInputChange('father', 'annualIncome', e.target.value)}
-                          className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                        />
-                      ) : (
-                        <p className="font-medium">{formData.father.annualIncome}</p>
-                      )}
+                      <p className="font-medium">{formData.father.annualIncome}</p>
                     </div>
                   </div>
                 </div>
@@ -240,96 +304,52 @@ export default function ParentInfo() {
 
               {/* Mother */}
               <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
-                    <User className="w-6 h-6 text-secondary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
-                      Mother
-                    </p>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.mother.name}
-                        onChange={(e) => handleInputChange('mother', 'name', e.target.value)}
-                        className="font-semibold w-full px-2 py-1 rounded border border-input bg-background"
-                      />
-                    ) : (
+                <div className="flex items-start gap-3 mb-4 justify-between">
+                  <div className="flex items-start gap-3 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <User className="w-6 h-6 text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-0.5">
+                        Mother
+                      </p>
                       <h3 className="font-semibold">{formData.mother.name}</h3>
-                    )}
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
-                      <Briefcase className="w-3 h-3" />
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.mother.occupation}
-                          onChange={(e) => handleInputChange('mother', 'occupation', e.target.value)}
-                          className="text-xs px-2 py-1 rounded border border-input bg-background flex-1"
-                        />
-                      ) : (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                        <Briefcase className="w-3 h-3" />
                         <span>{formData.mother.occupation}</span>
-                      )}
+                      </div>
                     </div>
                   </div>
+                  <button
+                    onClick={() => handleEditClick('mother')}
+                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
+                    title="Edit mother's information"
+                  >
+                    <Edit className="w-3 h-3" />
+                    Edit
+                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm">
                   <div>
                     <span className="text-muted-foreground text-xs">Phone</span>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.mother.phone}
-                        onChange={(e) => handleInputChange('mother', 'phone', e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                      />
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Phone className="w-4 h-4 text-muted-foreground" />
-                        <span className="font-medium">{formData.mother.phone}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-muted-foreground" />
+                      <span className="font-medium">{formData.mother.phone}</span>
+                    </div>
                   </div>
                   <div>
                     <span className="text-muted-foreground text-xs">Email</span>
-                    {isEditing ? (
-                      <input
-                        type="email"
-                        value={formData.mother.email}
-                        onChange={(e) => handleInputChange('mother', 'email', e.target.value)}
-                        className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                      />
-                    ) : (
-                      <p className="font-medium break-all">{formData.mother.email}</p>
-                    )}
+                    <p className="font-medium break-all">{formData.mother.email}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <span className="text-muted-foreground text-xs">Qualification</span>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.mother.qualification}
-                          onChange={(e) => handleInputChange('mother', 'qualification', e.target.value)}
-                          className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                        />
-                      ) : (
-                        <p className="font-medium">{formData.mother.qualification}</p>
-                      )}
+                      <p className="font-medium">{formData.mother.qualification}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground text-xs">Annual Income</span>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.mother.annualIncome}
-                          onChange={(e) => handleInputChange('mother', 'annualIncome', e.target.value)}
-                          className="w-full px-2 py-1 rounded border border-input bg-background mt-1 font-medium"
-                        />
-                      ) : (
-                        <p className="font-medium">{formData.mother.annualIncome}</p>
-                      )}
+                      <p className="font-medium">{formData.mother.annualIncome}</p>
                     </div>
                   </div>
                 </div>
@@ -338,80 +358,64 @@ export default function ParentInfo() {
 
             {/* Guardian block */}
             <div className="rounded-xl border border-dashed border-border/60 bg-background/40 p-4">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">
-                Local Guardian (if any)
-              </p>
+              <div className="flex items-start justify-between mb-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Local Guardian (if any)
+                </p>
+                <button
+                  onClick={() => handleEditClick('guardian')}
+                  className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
+                  title="Edit guardian's information"
+                >
+                  <Edit className="w-3 h-3" />
+                  Edit
+                </button>
+              </div>
               <div className="grid gap-4 sm:grid-cols-2 text-sm">
                 <div>
                   <label className="block text-xs text-muted-foreground mb-1">Name</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.guardian.name}
-                      onChange={(e) => handleInputChange('guardian', 'name', e.target.value)}
-                      className="w-full px-2 py-1 rounded border border-input bg-background font-medium"
-                    />
-                  ) : (
-                    <p className="font-medium">{formData.guardian.name}</p>
-                  )}
+                  <p className="font-medium">{formData.guardian.name}</p>
                 </div>
                 <div>
                   <label className="block text-xs text-muted-foreground mb-1">Relation</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.guardian.relation}
-                      onChange={(e) => handleInputChange('guardian', 'relation', e.target.value)}
-                      className="w-full px-2 py-1 rounded border border-input bg-background font-medium"
-                    />
-                  ) : (
-                    <p className="font-medium">{formData.guardian.relation}</p>
-                  )}
+                  <p className="font-medium">{formData.guardian.relation}</p>
                 </div>
                 <div>
                   <label className="block text-xs text-muted-foreground mb-1">Phone</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.guardian.phone}
-                      onChange={(e) => handleInputChange('guardian', 'phone', e.target.value)}
-                      className="w-full px-2 py-1 rounded border border-input bg-background font-medium"
-                    />
-                  ) : (
-                    <p className="font-medium">{formData.guardian.phone}</p>
-                  )}
+                  <p className="font-medium">{formData.guardian.phone}</p>
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-xs text-muted-foreground mb-1">Address</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.guardian.address}
-                      onChange={(e) => handleInputChange('guardian', 'address', e.target.value)}
-                      className="w-full px-2 py-1 rounded border border-input bg-background font-medium"
-                    />
-                  ) : (
-                    <p className="font-medium">{formData.guardian.address}</p>
-                  )}
+                  <p className="font-medium">{formData.guardian.address}</p>
                 </div>
               </div>
             </div>
 
             {/* Siblings */}
-            {parentData.siblings && parentData.siblings.length > 0 && (
+            {siblings && siblings.length > 0 && (
               <div>
                 <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3 font-semibold">Siblings</p>
                 <div className="grid gap-4 md:grid-cols-2">
-                  {parentData.siblings.map((sibling, index) => (
+                  {siblings.map((sibling, index) => (
                     <div key={index} className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                      <div className="flex items-start gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
-                          <Users className="w-6 h-6 text-blue-500" />
+                      <div className="flex items-start gap-3 mb-4 justify-between">
+                        <div className="flex items-start gap-3 flex-1">
+                          <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                            <Users className="w-6 h-6 text-blue-500" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold">{sibling.name}</h4>
+                            <p className="text-xs text-muted-foreground mt-1">Age: {sibling.age}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-semibold">{sibling.name}</h4>
-                          <p className="text-xs text-muted-foreground mt-1">Age: {sibling.age}</p>
-                        </div>
+                        <button
+                          onClick={() => handleEditSiblingClick(index)}
+                          className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
+                          title="Edit sibling's information"
+                        >
+                          <Edit className="w-3 h-3" />
+                          Edit
+                        </button>
                       </div>
                       <div className="space-y-2 text-sm">
                         <div>
@@ -433,6 +437,188 @@ export default function ParentInfo() {
             )}
           </div>
         </SectionCard>
+
+        {/* Dialog for editing parent information */}
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                {editingSiblingIndex !== null
+                  ? `Edit ${siblings[editingSiblingIndex]?.name || 'Sibling'}`
+                  : editingParent === 'father'
+                  ? "Edit Father's Information"
+                  : editingParent === 'mother'
+                  ? "Edit Mother's Information"
+                  : "Edit Guardian's Information"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Full Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter full name"
+                  value={dialogFormData.name}
+                  onChange={(e) => setDialogFormData({ ...dialogFormData, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                />
+              </div>
+
+              {(editingParent === 'father' || editingParent === 'mother') && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Occupation</label>
+                    <input
+                      type="text"
+                      placeholder="Enter occupation"
+                      value={dialogFormData.occupation}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, occupation: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <input
+                      type="text"
+                      placeholder="Enter phone number"
+                      value={dialogFormData.phone}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, phone: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <input
+                      type="email"
+                      placeholder="Enter email"
+                      value={dialogFormData.email}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, email: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Qualification</label>
+                    <input
+                      type="text"
+                      placeholder="Enter qualification"
+                      value={dialogFormData.qualification}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, qualification: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Annual Income</label>
+                    <input
+                      type="text"
+                      placeholder="Enter annual income"
+                      value={dialogFormData.annualIncome}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, annualIncome: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                </>
+              )}
+
+              {editingParent === 'guardian' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Relation</label>
+                    <input
+                      type="text"
+                      placeholder="Enter relation"
+                      value={dialogFormData.relation}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, relation: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <input
+                      type="text"
+                      placeholder="Enter phone number"
+                      value={dialogFormData.phone}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, phone: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Address</label>
+                    <textarea
+                      placeholder="Enter address"
+                      value={dialogFormData.address}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, address: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                </>
+              )}
+
+              {editingSiblingIndex !== null && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Name</label>
+                    <input
+                      type="text"
+                      placeholder="Enter sibling name"
+                      value={dialogFormData.name}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Age</label>
+                    <input
+                      type="number"
+                      placeholder="Enter age"
+                      value={dialogFormData.age}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, age: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Education</label>
+                    <input
+                      type="text"
+                      placeholder="Enter education"
+                      value={dialogFormData.education}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, education: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <input
+                      type="text"
+                      placeholder="Enter phone number"
+                      value={dialogFormData.phone}
+                      onChange={(e) => setDialogFormData({ ...dialogFormData, phone: e.target.value })}
+                      className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="flex gap-2 justify-end mt-6">
+                <DialogClose asChild>
+                  <button
+                    onClick={handleCancelDialog}
+                    className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </DialogClose>
+                <button
+                  onClick={handleSaveDialog}
+                  disabled={isSaving}
+                  className="btn-primary"
+                >
+                  {isSaving ? 'Saving...' : 'Update'}
+                </button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

@@ -219,6 +219,37 @@ export default function ReferenceInfo() {
 
       <ProfileNavBar />
 
+      {/* Add button with dropdown */}
+      <div className="relative mb-6">
+        <button
+          onClick={() => setShowAddMenu(!showAddMenu)}
+          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Add
+          <ChevronDown className="w-4 h-4" />
+        </button>
+
+        {showAddMenu && (
+          <div className="absolute top-full left-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-10">
+            <button
+              onClick={() => handleAddClick('reference')}
+              className="w-full text-left px-4 py-2 hover:bg-muted transition-colors first:rounded-t-lg"
+            >
+              <User className="w-4 h-4 inline mr-2" />
+              Add Reference
+            </button>
+            <button
+              onClick={() => handleAddClick('relative')}
+              className="w-full text-left px-4 py-2 hover:bg-muted transition-colors last:rounded-b-lg border-t border-border"
+            >
+              <User className="w-4 h-4 inline mr-2" />
+              Add Relative
+            </button>
+          </div>
+        )}
+      </div>
+
       <div className="grid gap-6">
         {filtered.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
