@@ -84,17 +84,6 @@ export default function Photos() {
     <SectionCard 
       title={title} 
       subtitle={description}
-      actions={
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          disabled={pendingRequest}
-          className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit photos"}
-        >
-          <Edit className="w-4 h-4" />
-          Edit
-        </button>
-      }
     >
       <div className="flex flex-col items-center gap-4">
         {photo ? (
@@ -117,31 +106,6 @@ export default function Photos() {
               <p className="text-sm font-medium text-muted-foreground">No photo uploaded</p>
               <p className="text-xs text-muted-foreground">Photo will appear here</p>
             </div>
-          </div>
-        )}
-        
-        {isEditing && (
-          <div className="flex gap-2 justify-center">
-            <label className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer flex items-center gap-2">
-              <Upload className="w-4 h-4" />
-              {photo ? 'Change Photo' : 'Upload Photo'}
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={(e) => handleFileChange(e, type)}
-                disabled={uploading === type}
-                className="hidden"
-              />
-            </label>
-            {photo && (
-              <button
-                onClick={() => removePhoto(type)}
-                className="px-4 py-2 rounded-lg border border-border hover:bg-destructive/10 text-destructive transition-colors flex items-center gap-2"
-              >
-                <X className="w-4 h-4" />
-                Remove
-              </button>
-            )}
           </div>
         )}
       </div>

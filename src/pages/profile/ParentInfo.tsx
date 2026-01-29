@@ -234,7 +234,7 @@ export default function ParentInfo() {
   };
 
   return (
-    <div className="animate-fade-in max-w-4xl">
+    <div className="animate-fade-in w-full">
       <PageHeader
         title="Parent Information"
         subtitle="Family and guardian details"
@@ -284,15 +284,6 @@ export default function ParentInfo() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleEditClick('father')}
-                    disabled={pendingRequest}
-                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                    title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit father's information"}
-                  >
-                    <Edit className="w-3 h-3" />
-                    Edit
-                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm">
@@ -338,15 +329,6 @@ export default function ParentInfo() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleEditClick('mother')}
-                    disabled={pendingRequest}
-                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                    title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit mother's information"}
-                  >
-                    <Edit className="w-3 h-3" />
-                    Edit
-                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm">
@@ -381,15 +363,7 @@ export default function ParentInfo() {
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
                   Local Guardian (if any)
                 </p>
-                <button
-                  onClick={() => handleEditClick('guardian')}
-                  disabled={pendingRequest}
-                  className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                  title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit guardian's information"}
-                >
-                  <Edit className="w-3 h-3" />
-                  Edit
-                </button>
+
               </div>
               <div className="grid gap-4 sm:grid-cols-2 text-sm">
                 <div>
@@ -428,15 +402,6 @@ export default function ParentInfo() {
                             <p className="text-xs text-muted-foreground mt-1">Age: {sibling.age}</p>
                           </div>
                         </div>
-                        <button
-                          onClick={() => handleEditSiblingClick(index)}
-                          disabled={pendingRequest}
-                          className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                          title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit sibling's information"}
-                        >
-                          <Edit className="w-3 h-3" />
-                          Edit
-                        </button>
                       </div>
                       <div className="space-y-2 text-sm">
                         <div>

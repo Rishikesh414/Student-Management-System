@@ -287,7 +287,7 @@ export default function Marks() {
           {Object.entries(gradePoints).map(([grade, points]) => (
             <div key={grade} className="flex items-center gap-2">
               <Badge variant={getGradeVariant(grade)}>{grade}</Badge>
-              <span className="text-muted-foreground">= {points} points</span>
+              <span className="text-muted-foreground">= 0 points</span>
             </div>
           ))}
         </div>

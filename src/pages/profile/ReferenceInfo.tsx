@@ -234,38 +234,7 @@ export default function ReferenceInfo() {
         </div>
       )}
 
-      {/* Add button with dropdown */}
-      <div className="relative mb-6">
-        <button
-          onClick={() => setShowAddMenu(!showAddMenu)}
-          disabled={pendingRequest}
-          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          title={pendingRequest ? "Cannot add while changes are pending approval" : "Add a new reference or relative"}
-        >
-          <Plus className="w-4 h-4" />
-          Add
-          <ChevronDown className="w-4 h-4" />
-        </button>
 
-        {showAddMenu && (
-          <div className="absolute top-full left-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-10">
-            <button
-              onClick={() => handleAddClick('reference')}
-              className="w-full text-left px-4 py-2 hover:bg-muted transition-colors first:rounded-t-lg"
-            >
-              <User className="w-4 h-4 inline mr-2" />
-              Add Reference
-            </button>
-            <button
-              onClick={() => handleAddClick('relative')}
-              className="w-full text-left px-4 py-2 hover:bg-muted transition-colors last:rounded-b-lg border-t border-border"
-            >
-              <User className="w-4 h-4 inline mr-2" />
-              Add Relative
-            </button>
-          </div>
-        )}
-      </div>
 
       <div className="grid gap-6">
         {filtered.length === 0 ? (
@@ -278,19 +247,6 @@ export default function ReferenceInfo() {
             <div key={ref.id} className="relative">
               <SectionCard 
                 title={`${ref.type === 'references' ? 'Reference' : 'Relative'} ${index + 1}`}
-                actions={
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleEditClick(ref)}
-                      disabled={pendingRequest}
-                      className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                      title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit reference"}
-                    >
-                      <Edit className="w-4 h-4" />
-                      Edit
-                    </button>
-                  </div>
-                }
               >
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
