@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { User, Phone, Briefcase, Users, Edit, Save, X } from 'lucide-react';
+import { User, Phone, Briefcase, Users, Edit, Save, X, Clock } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 
@@ -50,6 +50,7 @@ export default function ParentInfo() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(false);
   const [editingParent, setEditingParent] = useState<'father' | 'mother' | 'guardian' | null>(null);
   const [editingSiblingIndex, setEditingSiblingIndex] = useState<number | null>(null);
   const [siblings, setSiblings] = useState(parentData.siblings);
@@ -136,9 +137,10 @@ export default function ParentInfo() {
         education: dialogFormData.education,
       };
       setSiblings(updatedSiblings);
+      setPendingRequest(true);
       toast({
-        title: 'Success',
-        description: 'Sibling information updated successfully.',
+        title: 'Request Submitted',
+        description: 'Your changes have been submitted to faculty for approval.',
       });
     } else if (editingParent === 'father' || editingParent === 'mother') {
       setFormData(prev => ({
@@ -153,9 +155,10 @@ export default function ParentInfo() {
           annualIncome: dialogFormData.annualIncome,
         },
       }));
+      setPendingRequest(true);
       toast({
-        title: 'Success',
-        description: 'Information updated successfully.',
+        title: 'Request Submitted',
+        description: 'Your changes have been submitted to faculty for approval.',
       });
     } else if (editingParent === 'guardian') {
       setFormData(prev => ({
@@ -168,9 +171,10 @@ export default function ParentInfo() {
           address: dialogFormData.address,
         },
       }));
+      setPendingRequest(true);
       toast({
-        title: 'Success',
-        description: 'Guardian information updated successfully.',
+        title: 'Request Submitted',
+        description: 'Your changes have been submitted to faculty for approval.',
       });
     }
 
@@ -243,6 +247,19 @@ export default function ParentInfo() {
       <ProfileNavBar />
 
       <div className="grid gap-6">
+        {/* Pending Request Alert */}
+        {pendingRequest && (
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200">
+            <Clock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-amber-900">Change Request Pending</h3>
+              <p className="text-sm text-amber-800 mt-1">
+                Your changes have been submitted to faculty for approval. You will be notified once they review your request.
+              </p>
+            </div>
+          </div>
+        )}
+
         <SectionCard 
           title="Parent & Guardian Details"
         >
@@ -269,8 +286,9 @@ export default function ParentInfo() {
                   </div>
                   <button
                     onClick={() => handleEditClick('father')}
-                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
-                    title="Edit father's information"
+                    disabled={pendingRequest}
+                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                    title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit father's information"}
                   >
                     <Edit className="w-3 h-3" />
                     Edit
@@ -322,8 +340,9 @@ export default function ParentInfo() {
                   </div>
                   <button
                     onClick={() => handleEditClick('mother')}
-                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
-                    title="Edit mother's information"
+                    disabled={pendingRequest}
+                    className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                    title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit mother's information"}
                   >
                     <Edit className="w-3 h-3" />
                     Edit
@@ -364,8 +383,9 @@ export default function ParentInfo() {
                 </p>
                 <button
                   onClick={() => handleEditClick('guardian')}
-                  className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
-                  title="Edit guardian's information"
+                  disabled={pendingRequest}
+                  className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit guardian's information"}
                 >
                   <Edit className="w-3 h-3" />
                   Edit
@@ -410,8 +430,9 @@ export default function ParentInfo() {
                         </div>
                         <button
                           onClick={() => handleEditSiblingClick(index)}
-                          className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs"
-                          title="Edit sibling's information"
+                          disabled={pendingRequest}
+                          className="px-2 py-1 rounded border border-border hover:bg-muted transition-colors flex items-center gap-1 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                          title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit sibling's information"}
                         >
                           <Edit className="w-3 h-3" />
                           Edit

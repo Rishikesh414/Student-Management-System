@@ -2,7 +2,7 @@ import { useAuth } from '@/context/AuthContext';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { User, Upload } from 'lucide-react';
+import { User, Upload, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -44,6 +44,7 @@ export default function BasicInfo() {
   const { toast } = useToast();
   const [resumeFile, setResumeFile] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(false);
 
   const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,9 +80,10 @@ export default function BasicInfo() {
       
       setResumeFile(file.name);
       setUploading(false);
+      setPendingRequest(true);
       toast({
-        title: 'Success',
-        description: 'Resume uploaded successfully.',
+        title: 'Request Submitted',
+        description: 'Your resume has been submitted to faculty for approval.',
       });
     };
     reader.readAsDataURL(file);
@@ -99,6 +101,18 @@ export default function BasicInfo() {
       />
 
       <ProfileNavBar />
+
+      {pendingRequest && (
+        <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 mb-6">
+          <Clock className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-amber-900">Change Request Pending</h3>
+            <p className="text-sm text-amber-800 mt-1">
+              Your changes have been submitted to faculty for approval. You cannot make new changes until they respond.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6">
         {/* Profile Header */}
@@ -125,7 +139,8 @@ export default function BasicInfo() {
               )}
               <label className="cursor-pointer">
                 <Button
-                  className="flex items-center gap-2 whitespace-nowrap"
+                  disabled={pendingRequest}
+                  className="flex items-center gap-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                   asChild
                 >
                   <span>
@@ -137,7 +152,7 @@ export default function BasicInfo() {
                   type="file"
                   accept=".pdf"
                   onChange={handleResumeUpload}
-                  disabled={uploading}
+                  disabled={uploading || pendingRequest}
                   className="hidden"
                 />
               </label>

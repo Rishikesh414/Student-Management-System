@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { Save, X, Edit } from 'lucide-react';
+import { Save, X, Edit, Clock, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const personalData = {
@@ -27,6 +27,7 @@ const personalData = {
 export default function PersonalInfo() {
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(false);
   const [formData, setFormData] = useState({
     email: personalData.email,
     linkedinUrl: personalData.linkedinUrl,
@@ -41,13 +42,14 @@ export default function PersonalInfo() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
+    // Simulate API call to create change request
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsSaving(false);
     setIsEditing(false);
+    setPendingRequest(true);
     toast({
-      title: 'Success',
-      description: 'Personal information updated successfully.',
+      title: 'Request Submitted',
+      description: 'Your changes have been submitted to faculty for approval.',
     });
   };
 
@@ -79,6 +81,19 @@ export default function PersonalInfo() {
       <ProfileNavBar />
 
       <div className="grid gap-6">
+        {/* Pending Request Alert */}
+        {pendingRequest && (
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200">
+            <Clock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-amber-900">Change Request Pending</h3>
+              <p className="text-sm text-amber-800 mt-1">
+                Your changes have been submitted to faculty for approval. You will be notified once they review your request.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Unified Personal Details Card */}
         <SectionCard 
           title="Personal Details"
@@ -111,8 +126,9 @@ export default function PersonalInfo() {
             ) : (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
-                title="Edit personal details"
+                disabled={pendingRequest}
+                className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit personal details"}
               >
                 <Edit className="w-4 h-4" />
                 Edit

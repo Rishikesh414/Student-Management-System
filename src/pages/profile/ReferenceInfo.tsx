@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { User, Phone, MapPin, Plus, ChevronDown, X, Edit, Trash2, MoreVertical } from 'lucide-react';
+import { User, Phone, MapPin, Plus, ChevronDown, X, Edit, Trash2, MoreVertical, Clock } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 
@@ -39,6 +39,7 @@ export default function ReferenceInfo() {
   const [filter, setFilter] = useState<'all' | 'references' | 'relatives'>('all');
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(false);
   const [addType, setAddType] = useState<'reference' | 'relative'>('reference');
   const [formData, setFormData] = useState({
     name: '',
@@ -128,9 +129,10 @@ export default function ReferenceInfo() {
       setIsSaving(false);
       setShowDialog(false);
       setEditingId(null);
+      setPendingRequest(true);
       toast({
-        title: 'Success',
-        description: 'Reference updated successfully.',
+        title: 'Request Submitted',
+        description: 'Your changes have been submitted to faculty for approval.',
       });
     } else {
       // Add new reference
@@ -146,10 +148,11 @@ export default function ReferenceInfo() {
       setReferenceList([...referenceList, newReference]);
       setIsSaving(false);
       setShowDialog(false);
+      setPendingRequest(true);
 
       toast({
-        title: 'Success',
-        description: `${addType === 'reference' ? 'Reference' : 'Relative'} added successfully.`,
+        title: 'Request Submitted',
+        description: `${addType === 'reference' ? 'Reference' : 'Relative'} submitted for faculty approval.`,
       });
     }
   };
@@ -219,11 +222,25 @@ export default function ReferenceInfo() {
 
       <ProfileNavBar />
 
+      {pendingRequest && (
+        <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 mb-6">
+          <Clock className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-amber-900">Change Request Pending</h3>
+            <p className="text-sm text-amber-800 mt-1">
+              Your changes have been submitted to faculty for approval. You cannot make new changes until they respond.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Add button with dropdown */}
       <div className="relative mb-6">
         <button
           onClick={() => setShowAddMenu(!showAddMenu)}
-          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2"
+          disabled={pendingRequest}
+          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          title={pendingRequest ? "Cannot add while changes are pending approval" : "Add a new reference or relative"}
         >
           <Plus className="w-4 h-4" />
           Add
@@ -265,8 +282,9 @@ export default function ReferenceInfo() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleEditClick(ref)}
-                      className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
-                      title="Edit reference"
+                      disabled={pendingRequest}
+                      className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit reference"}
                     >
                       <Edit className="w-4 h-4" />
                       Edit

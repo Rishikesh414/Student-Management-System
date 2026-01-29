@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { Upload, Camera, Users, X, Check, Edit } from 'lucide-react';
+import { Upload, Camera, Users, X, Check, Edit, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Photos() {
@@ -11,6 +11,7 @@ export default function Photos() {
   const [familyPhoto, setFamilyPhoto] = useState<string | null>(null);
   const [uploading, setUploading] = useState<'student' | 'family' | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'student' | 'family') => {
     const file = e.target.files?.[0];
@@ -50,9 +51,10 @@ export default function Photos() {
       }
       
       setUploading(null);
+      setPendingRequest(true);
       toast({
-        title: 'Photo uploaded',
-        description: 'Your photo has been uploaded successfully.',
+        title: 'Request Submitted',
+        description: 'Your photo has been submitted to faculty for approval.',
       });
     };
     reader.readAsDataURL(file);
@@ -85,8 +87,9 @@ export default function Photos() {
       actions={
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
-          title="Edit photos"
+          disabled={pendingRequest}
+          className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit photos"}
         >
           <Edit className="w-4 h-4" />
           Edit
@@ -157,6 +160,18 @@ export default function Photos() {
       />
 
       <ProfileNavBar />
+
+      {pendingRequest && (
+        <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 mb-6">
+          <Clock className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold text-amber-900">Change Request Pending</h3>
+            <p className="text-sm text-amber-800 mt-1">
+              Your photos have been submitted to faculty for approval. You cannot make new changes until they respond.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 sm:grid-cols-2">
         <PhotoUploadCard
