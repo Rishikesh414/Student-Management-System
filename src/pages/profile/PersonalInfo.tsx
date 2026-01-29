@@ -2,14 +2,17 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { Save, X, Edit, Clock, AlertCircle } from 'lucide-react';
+import { Save, X, Edit, Clock, Upload, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+
+/* -------------------- STATIC DATA (Mock API) -------------------- */
 
 const personalData = {
   email: 'rahul.sharma@student.university.edu',
   linkedinUrl: 'https://linkedin.com/in/rahul-sharma',
-  phone: '+91 98765 43210',
-  alternatePhone: '+91 87654 32109',
+  phone: '+91 9876543210',
+  alternatePhone: '+91 8765432109',
   address: '123 Main Street, Sector 15',
   city: 'Mumbai',
   state: 'Maharashtra',
@@ -24,11 +27,26 @@ const personalData = {
   motherTongue: 'Hindi',
 };
 
+const basicInfoData = {
+  rollNo: '21CS101',
+  registerNo: '921023104008',
+  admissionNo: 'ADM2021-001',
+  name: 'Rahul Sharma',
+  department: 'Computer Science',
+  year: 3,
+  semester: 5,
+  section: 'A',
+  admissionDate: '2021-08-01',
+  batch: '2021-2025',
+  residenceType: 'Hostel',
+};
+
+/* -------------------- COMPONENT -------------------- */
+
 export default function PersonalInfo() {
   const { toast } = useToast();
-  const [isEditing, setIsEditing] = useState(false);
-  const [pendingRequest, setPendingRequest] = useState(false);
-  const [formData, setFormData] = useState({
+
+  const initialFormData = {
     email: personalData.email,
     linkedinUrl: personalData.linkedinUrl,
     phone: personalData.phone,
@@ -37,35 +55,115 @@ export default function PersonalInfo() {
     city: personalData.city,
     state: personalData.state,
     pincode: personalData.pincode,
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  const [resumeFile, setResumeFile] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  // Separate pending states (ERP-style)
+  const [pendingProfileRequest, setPendingProfileRequest] = useState(false);
+  const [pendingResumeRequest, setPendingResumeRequest] = useState(false);
+
+  const pendingRequest = pendingProfileRequest || pendingResumeRequest;
+
+  /* -------------------- VALIDATION -------------------- */
+
+  const validateForm = () => {
+    if (!formData.email.includes('@')) {
+      toast({
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address.',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    if (formData.phone.replace(/\D/g, '').length !== 12) {
+      toast({
+        title: 'Invalid Phone Number',
+        description: 'Phone number must include country code (+91).',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      toast({
+        title: 'Invalid Pin Code',
+        description: 'Pin code must be exactly 6 digits.',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  /* -------------------- HANDLERS -------------------- */
+
   const handleSave = async () => {
+    if (!validateForm()) return;
+
     setIsSaving(true);
-    // Simulate API call to create change request
+
+    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
+
     setIsSaving(false);
     setIsEditing(false);
-    setPendingRequest(true);
+    setPendingProfileRequest(true);
+
     toast({
       title: 'Request Submitted',
-      description: 'Your changes have been submitted to faculty for approval.',
+      description: 'Your changes were sent to faculty for approval.',
     });
   };
 
   const handleCancel = () => {
-    setFormData({
-      email: personalData.email,
-      linkedinUrl: personalData.linkedinUrl,
-      phone: personalData.phone,
-      alternatePhone: personalData.alternatePhone,
-      address: personalData.address,
-      city: personalData.city,
-      state: personalData.state,
-      pincode: personalData.pincode,
-    });
+    setFormData(initialFormData);
     setIsEditing(false);
   };
+
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      toast({
+        title: 'Invalid File Type',
+        description: 'Only PDF files are allowed.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: 'File Too Large',
+        description: 'Maximum file size is 5MB.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setUploading(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    setResumeFile(file.name);
+    setUploading(false);
+    setPendingResumeRequest(true);
+
+    toast({
+      title: 'Resume Submitted',
+      description: 'Resume sent for faculty approval.',
+    });
+  };
+
+  /* -------------------- UI -------------------- */
 
   return (
     <div className="animate-fade-in max-w-4xl">
@@ -78,63 +176,56 @@ export default function PersonalInfo() {
         ]}
       />
 
-      <ProfileNavBar />
-
-      <div className="grid gap-6">
-        {/* Pending Request Alert */}
-        {pendingRequest && (
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200">
-            <Clock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+      {/* Profile Header */}
+      <div className="section-card p-6 mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="w-10 h-10 text-primary" />
+            </div>
             <div>
-              <h3 className="font-semibold text-amber-900">Change Request Pending</h3>
-              <p className="text-sm text-amber-800 mt-1">
-                Your changes have been submitted to faculty for approval. You will be notified once they review your request.
-              </p>
+              <h2 className="text-xl font-bold">{basicInfoData.name}</h2>
+              <p className="text-muted-foreground">{basicInfoData.rollNo}</p>
+              <span className="badge badge-info mt-2">{basicInfoData.department}</span>
             </div>
           </div>
-        )}
 
-        {/* Unified Personal Details Card */}
-        <SectionCard 
+          <label className="cursor-pointer">
+            <Button disabled={pendingRequest || uploading} asChild>
+              <span className="flex items-center gap-2">
+                <Upload className="w-4 h-4" />
+                {resumeFile ? 'Change Resume' : 'Upload Resume'}
+              </span>
+            </Button>
+            <input
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              onChange={handleResumeUpload}
+            />
+          </label>
+        </div>
+      </div>
+
+      <ProfileNavBar />
+
+      {/* Pending Alert */}
+      {pendingRequest && (
+        <div className="flex gap-3 p-4 mb-6 bg-amber-50 border border-amber-200 rounded-lg">
+          <Clock className="w-5 h-5 text-amber-600 mt-1" />
+          <div>
+            <h3 className="font-semibold text-amber-900">Approval Pending</h3>
+            <p className="text-sm text-amber-800">
+              Your request is under faculty review.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Personal Details */}
+      <SectionCard 
           title="Personal Details"
           subtitle="Manage your personal, contact, and address information"
-          actions={
-            isEditing ? (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleCancel}
-                  className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
-                >
-                  <X className="w-4 h-4" />
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="btn-primary flex items-center gap-2"
-                >
-                  {isSaving ? (
-                    <>Saving...</>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" />
-                      Save
-                    </>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setIsEditing(true)}
-                disabled={pendingRequest}
-                className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                title={pendingRequest ? "Cannot edit while changes are pending approval" : "Edit personal details"}
-              >
-                <Edit className="w-4 h-4" />
-                Edit
-              </button>
-            )
-          }
         >
           <div className="space-y-6">
             {/* Core personal details (read-only) */}
@@ -293,6 +384,5 @@ export default function PersonalInfo() {
           </div>
         </SectionCard>
       </div>
-    </div>
-  );
+  ); // missing closing parenthesis for the div tag
 }

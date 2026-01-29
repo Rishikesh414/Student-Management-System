@@ -7,7 +7,6 @@ interface ProfileNavItem {
 }
 
 const profileNavItems: ProfileNavItem[] = [
-  { path: '/profile/basic', label: 'Basic Info' },
   { path: '/profile/personal', label: 'Personal Info' },
   { path: '/profile/parent', label: 'Parent Info' },
   { path: '/profile/reference', label: 'Reference' },

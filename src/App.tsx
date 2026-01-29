@@ -16,7 +16,6 @@ import Login from "@/pages/auth/Login";
 import StudentDashboard from "@/pages/dashboard/StudentDashboard";
 
 // Profile
-import BasicInfo from "@/pages/profile/BasicInfo";
 import PersonalInfo from "@/pages/profile/PersonalInfo";
 import ParentInfo from "@/pages/profile/ParentInfo";
 import ReferenceInfo from "@/pages/profile/ReferenceInfo";
@@ -74,7 +73,8 @@ const App = () => (
               <Route path="/dashboard" element={<StudentDashboard />} />
 
               {/* Profile */}
-              <Route path="/profile/basic" element={<BasicInfo />} />
+              <Route path="/profile" element={<Navigate to="/profile/personal" replace />} />
+              <Route path="/profile/basic" element={<Navigate to="/profile/personal" replace />} />
               <Route path="/profile/personal" element={<PersonalInfo />} />
               <Route path="/profile/parent" element={<ParentInfo />} />
               <Route path="/profile/reference" element={<ReferenceInfo />} />
