@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { Upload, Camera, Users, X, Check } from 'lucide-react';
+import { Upload, Camera, Users, X, Check, Edit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Photos() {
@@ -10,6 +10,7 @@ export default function Photos() {
   const [studentPhoto, setStudentPhoto] = useState<string | null>(null);
   const [familyPhoto, setFamilyPhoto] = useState<string | null>(null);
   const [uploading, setUploading] = useState<'student' | 'family' | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'student' | 'family') => {
     const file = e.target.files?.[0];
@@ -78,8 +79,21 @@ export default function Photos() {
   }
 
   const PhotoUploadCard = ({ title, description, icon: Icon, photo, type }: PhotoUploadCardProps) => (
-    <SectionCard title={title} subtitle={description}>
-      <div className="flex flex-col items-center">
+    <SectionCard 
+      title={title} 
+      subtitle={description}
+      actions={
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
+          title="Edit photos"
+        >
+          <Edit className="w-4 h-4" />
+          Edit
+        </button>
+      }
+    >
+      <div className="flex flex-col items-center gap-4">
         {photo ? (
           <div className="relative">
             <img
@@ -100,6 +114,31 @@ export default function Photos() {
               <p className="text-sm font-medium text-muted-foreground">No photo uploaded</p>
               <p className="text-xs text-muted-foreground">Photo will appear here</p>
             </div>
+          </div>
+        )}
+        
+        {isEditing && (
+          <div className="flex gap-2 justify-center">
+            <label className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              {photo ? 'Change Photo' : 'Upload Photo'}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={(e) => handleFileChange(e, type)}
+                disabled={uploading === type}
+                className="hidden"
+              />
+            </label>
+            {photo && (
+              <button
+                onClick={() => removePhoto(type)}
+                className="px-4 py-2 rounded-lg border border-border hover:bg-destructive/10 text-destructive transition-colors flex items-center gap-2"
+              >
+                <X className="w-4 h-4" />
+                Remove
+              </button>
+            )}
           </div>
         )}
       </div>

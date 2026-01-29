@@ -230,6 +230,18 @@ export default function ReferenceInfo() {
             <div key={ref.id} className="relative">
               <SectionCard 
                 title={`${ref.type === 'references' ? 'Reference' : 'Relative'} ${index + 1}`}
+                actions={
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleEditClick(ref)}
+                      className="px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center gap-2"
+                      title="Edit reference"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Edit
+                    </button>
+                  </div>
+                }
               >
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
@@ -255,6 +267,100 @@ export default function ReferenceInfo() {
             </div>
           ))
         )}
+
+        {/* Dialog for adding/editing references */}
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                {editingId ? 'Edit Reference' : `Add New ${addType === 'reference' ? 'Reference' : 'Relative'}`}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Full Name *</label>
+                <input
+                  type="text"
+                  placeholder="Enter full name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Relationship *</label>
+                <select
+                  value={formData.relationship}
+                  onChange={(e) => setFormData({ ...formData, relationship: e.target.value })}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                >
+                  <option value="">Select relationship</option>
+                  {relationshipOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Occupation</label>
+                <input
+                  type="text"
+                  placeholder="Enter occupation"
+                  value={formData.occupation}
+                  onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Mobile Number *</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="+91"
+                    value={formData.countryCode}
+                    onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
+                    className="w-20 px-3 py-2 border border-input rounded-lg bg-background"
+                  />
+                  <input
+                    type="text"
+                    placeholder="10 digits"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="flex-1 px-3 py-2 border border-input rounded-lg bg-background"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Address</label>
+                <textarea
+                  placeholder="Enter address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background"
+                />
+              </div>
+              <div className="flex gap-2 justify-end mt-6">
+                <DialogClose asChild>
+                  <button
+                    onClick={handleCancel}
+                    className="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </DialogClose>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSaving}
+                  className="btn-primary"
+                >
+                  {isSaving ? 'Saving...' : editingId ? 'Update' : 'Add'}
+                </button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
