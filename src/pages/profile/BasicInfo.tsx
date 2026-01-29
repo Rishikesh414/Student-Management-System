@@ -2,8 +2,10 @@ import { useAuth } from '@/context/AuthContext';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionCard from '@/components/common/SectionCard';
 import ProfileNavBar from '@/components/layout/ProfileNavBar';
-import { User, Download } from 'lucide-react';
+import { User, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 // Mock additional data
 const basicInfoData = {
@@ -39,56 +41,50 @@ function InfoRow({ label, value }: InfoRowProps) {
 
 export default function BasicInfo() {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [resumeFile, setResumeFile] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const handleDownloadResume = () => {
-    // Create a sample resume content in PDF format
-    const resumeContent = `
-RAHUL SHARMA
-Roll No: 21CS101 | Email: rahul.sharma@college.edu | Phone: +91 9876543210
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-SUMMARY
-Dedicated Computer Science student with strong academic performance and passion for software development. 
-Proficient in multiple programming languages and frameworks with hands-on experience in various projects.
+    // Validate file type
+    if (!file.type.includes('pdf') && !file.type.includes('document') && !file.name.endsWith('.pdf')) {
+      toast({
+        title: 'Invalid file type',
+        description: 'Please upload a PDF file.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-EDUCATION
-Bachelor of Technology (B.Tech) in Computer Science
-College/University Name | Expected Graduation: 2025
-Current Semester: 5 (3rd Year) | GPA: 8.5/10 | Section: A
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: 'File too large',
+        description: 'Please upload a file smaller than 5MB.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-TECHNICAL SKILLS
-Languages: Python, Java, C++, JavaScript, HTML/CSS
-Frameworks & Tools: React, Node.js, SQL, Git, Linux
-Specializations: Web Development, Data Structures, Database Management
+    setUploading(true);
 
-ACADEMIC ACHIEVEMENTS
-• Dean's List for excellent academic performance
-• Active participant in coding competitions
-• Technical event organizer at college functions
-
-PROJECTS
-• Student Management System - Built using React and Node.js
-• E-Commerce Platform - Full-stack development project
-• Data Visualization Dashboard - Python and D3.js
-
-EXTRACURRICULAR ACTIVITIES
-• Football Team Member
-• Cultural Fest Participant
-• Technical Club Coordinator
-
-CERTIFICATIONS & TRAINING
-• Python Programming - Completed
-• Web Development Bootcamp - In Progress
-    `;
-
-    // Create a blob and download it as a text file
-    // In a real application, this would be a PDF file
-    const element = document.createElement('a');
-    const file = new Blob([resumeContent], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = 'Rahul_Sharma_Resume.txt';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    // Simulate file upload
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      // Simulate upload delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setResumeFile(file.name);
+      setUploading(false);
+      toast({
+        title: 'Success',
+        description: 'Resume uploaded successfully.',
+      });
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -121,13 +117,31 @@ CERTIFICATIONS & TRAINING
                 </div>
               </div>
             </div>
-            <Button
-              onClick={handleDownloadResume}
-              className="flex items-center gap-2 whitespace-nowrap"
-            >
-              <Download className="w-4 h-4" />
-              Download Resume
-            </Button>
+            <div className="flex items-center gap-2">
+              {resumeFile && (
+                <span className="text-sm text-muted-foreground">
+                  Resume: <span className="font-medium">{resumeFile}</span>
+                </span>
+              )}
+              <label className="cursor-pointer">
+                <Button
+                  className="flex items-center gap-2 whitespace-nowrap"
+                  asChild
+                >
+                  <span>
+                    <Upload className="w-4 h-4" />
+                    {resumeFile ? 'Change Resume' : 'Upload Resume'}
+                  </span>
+                </Button>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleResumeUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+              </label>
+            </div>
           </div>
         </div>
 
