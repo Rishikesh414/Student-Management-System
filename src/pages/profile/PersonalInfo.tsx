@@ -226,6 +226,16 @@ export default function PersonalInfo() {
       <SectionCard 
           title="Personal Details"
           subtitle="Manage your personal, contact, and address information"
+          actions={
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              disabled={pendingRequest}
+              className="p-2 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title={isEditing ? 'Cancel' : 'Edit'}
+            >
+              {isEditing ? <X className="w-5 h-5" /> : <Edit className="w-5 h-5" />}
+            </button>
+          }
         >
           {/* Admission details */}
           <div className="grid gap-4 sm:grid-cols-4">
@@ -420,6 +430,28 @@ export default function PersonalInfo() {
               <p className="text-base font-semibold text-slate-900">{personalData.aadharNo}</p>
               </div>
             </div>
+
+            {/* Action buttons */}
+            {isEditing && (
+              <div className="flex gap-3 pt-6 border-t border-border mt-6">
+                <button
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                  className="flex-1 px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors disabled:opacity-50"
+                >
+                  <X className="w-4 h-4 inline mr-2" />
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving || pendingRequest}
+                  className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  <Save className="w-4 h-4" />
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            )}
           </div>
         </SectionCard>
       </div>

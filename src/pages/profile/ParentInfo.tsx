@@ -284,6 +284,14 @@ export default function ParentInfo() {
                       </div>
                     </div>
                   </div>
+                  <button
+                    onClick={() => handleEditClick('father')}
+                    disabled={pendingRequest}
+                    className="p-2 rounded-lg hover:bg-background transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                    title="Edit father's information"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm">
@@ -329,6 +337,14 @@ export default function ParentInfo() {
                       </div>
                     </div>
                   </div>
+                  <button
+                    onClick={() => handleEditClick('mother')}
+                    disabled={pendingRequest}
+                    className="p-2 rounded-lg hover:bg-background transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                    title="Edit mother's information"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm">
@@ -363,7 +379,14 @@ export default function ParentInfo() {
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
                   Local Guardian (if any)
                 </p>
-
+                <button
+                  onClick={() => handleEditClick('guardian')}
+                  disabled={pendingRequest}
+                  className="p-2 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Edit guardian's information"
+                >
+                  <Edit className="w-4 h-4" />
+                </button>
               </div>
               <div className="grid gap-4 sm:grid-cols-2 text-sm">
                 <div>
@@ -402,6 +425,14 @@ export default function ParentInfo() {
                             <p className="text-xs text-muted-foreground mt-1">Age: {sibling.age}</p>
                           </div>
                         </div>
+                        <button
+                          onClick={() => handleEditSiblingClick(index)}
+                          disabled={pendingRequest}
+                          className="p-2 rounded-lg hover:bg-background transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                          title={`Edit ${sibling.name}'s information`}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
                       </div>
                       <div className="space-y-2 text-sm">
                         <div>

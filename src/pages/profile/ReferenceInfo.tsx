@@ -234,7 +234,36 @@ export default function ReferenceInfo() {
         </div>
       )}
 
-
+      {/* Add Reference/Relative Button */}
+      <div className="mb-6 flex gap-2">
+        <div className="relative">
+          <button
+            onClick={() => setShowAddMenu(!showAddMenu)}
+            disabled={pendingRequest}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Plus className="w-4 h-4" />
+            Add New
+            <ChevronDown className="w-4 h-4" />
+          </button>
+          {showAddMenu && (
+            <div className="absolute top-full left-0 mt-2 bg-background border border-border rounded-lg shadow-lg z-10">
+              <button
+                onClick={() => handleAddClick('reference')}
+                className="block w-full text-left px-4 py-2 hover:bg-muted transition-colors first:rounded-t-lg"
+              >
+                Reference
+              </button>
+              <button
+                onClick={() => handleAddClick('relative')}
+                className="block w-full text-left px-4 py-2 hover:bg-muted transition-colors last:rounded-b-lg"
+              >
+                Relative
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="grid gap-6">
         {filtered.length === 0 ? (
@@ -247,6 +276,26 @@ export default function ReferenceInfo() {
             <div key={ref.id} className="relative">
               <SectionCard 
                 title={`${ref.type === 'references' ? 'Reference' : 'Relative'} ${index + 1}`}
+                actions={
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditClick(ref)}
+                      disabled={pendingRequest || isSaving}
+                      className="p-2 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Edit"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClick(ref.id)}
+                      disabled={pendingRequest || isSaving}
+                      className="p-2 rounded-lg hover:bg-destructive/10 hover:text-destructive transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                }
               >
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">

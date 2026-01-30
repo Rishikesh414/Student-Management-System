@@ -84,6 +84,16 @@ export default function Photos() {
     <SectionCard 
       title={title} 
       subtitle={description}
+      actions={
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          disabled={pendingRequest}
+          className="p-2 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title={isEditing ? 'Cancel' : 'Edit'}
+        >
+          {isEditing ? <X className="w-5 h-5" /> : <Edit className="w-5 h-5" />}
+        </button>
+      }
     >
       <div className="flex flex-col items-center gap-4">
         {photo ? (
@@ -96,17 +106,47 @@ export default function Photos() {
             <div className="absolute bottom-2 right-2 w-6 h-6 bg-success text-success-foreground rounded-full flex items-center justify-center">
               <Check className="w-4 h-4" />
             </div>
+            {isEditing && (
+              <div className="absolute inset-0 rounded-xl bg-black/30 flex items-center justify-center gap-2 opacity-0 hover:opacity-100 transition-opacity">
+                <label className="cursor-pointer bg-primary text-primary-foreground px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 text-sm">
+                  <Upload className="w-4 h-4" />
+                  Change
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, type)}
+                    disabled={pendingRequest || uploading === type}
+                  />
+                </label>
+                <button
+                  onClick={() => removePhoto(type)}
+                  disabled={pendingRequest || uploading === type}
+                  className="bg-destructive text-destructive-foreground px-3 py-2 rounded-lg hover:bg-destructive/90 transition-colors flex items-center gap-2 text-sm disabled:opacity-50"
+                >
+                  <X className="w-4 h-4" />
+                  Remove
+                </button>
+              </div>
+            )}
           </div>
         ) : (
-          <div className="w-48 h-48 rounded-xl border-2 border-dashed border-border bg-muted/30 flex flex-col items-center justify-center gap-3">
+          <label className="w-48 h-48 rounded-xl border-2 border-dashed border-border bg-muted/30 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-muted/50 transition-colors" style={{ pointerEvents: isEditing ? 'auto' : 'none', opacity: isEditing ? 1 : 0.5 }}>
             <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center">
               <Icon className="w-7 h-7 text-muted-foreground" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-muted-foreground">No photo uploaded</p>
-              <p className="text-xs text-muted-foreground">Photo will appear here</p>
+              <p className="text-sm font-medium text-muted-foreground">Click to upload</p>
+              <p className="text-xs text-muted-foreground">JPG, PNG or WebP (max 5MB)</p>
             </div>
-          </div>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(e) => handleFileChange(e, type)}
+              disabled={pendingRequest || uploading === type}
+            />
+          </label>
         )}
       </div>
     </SectionCard>
